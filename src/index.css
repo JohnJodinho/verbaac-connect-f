@@ -1,0 +1,325 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    /* ---------- Core Brand Colors ---------- */
+    --primary: 172 100% 45%; /* Aqua glow (#00E0C7) */
+    --primary-foreground: 0 0% 100%; /* White text on aqua */
+
+    --secondary: 210 20% 25%; /* Slate gray for neutral areas */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 172 80% 45%; /* Slightly lighter aqua */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 16% 90%;
+    --muted-foreground: 210 10% 40%;
+
+    --background: 210 33% 98%;
+    --foreground: 210 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 25% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 16% 88%;
+    --input: 210 16% 88%;
+    --ring: 172 100% 45%; /* same as primary for focus rings */
+
+    /* ---------- Chart Colors ---------- */
+    --chart-1: 172 100% 45%;
+    --chart-2: 210 90% 50%;
+    --chart-3: 280 80% 55%;
+    --chart-4: 45 90% 55%;
+    --chart-5: 10 90% 60%;
+
+    /* ---------- Sidebar ---------- */
+    --sidebar-background: 210 40% 98%;
+    --sidebar-foreground: 210 15% 15%;
+    --sidebar-primary: 172 100% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 16% 90%;
+    --sidebar-accent-foreground: 210 10% 30%;
+    --sidebar-border: 210 16% 88%;
+    --sidebar-ring: 172 100% 45%;
+
+    --radius: 0.75rem;
+  }
+
+  /* ---------- Dark Mode Theme ---------- */
+  .dark {
+    --background: 210 30% 8%;
+    --foreground: 210 20% 98%;
+
+    --card: 210 25% 10%;
+    --card-foreground: 210 15% 90%;
+
+    --popover: 210 25% 10%;
+    --popover-foreground: 210 15% 90%;
+
+    --primary: 172 100% 55%; /* Slightly brighter glow on dark */
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 210 10% 25%;
+    --secondary-foreground: 210 15% 90%;
+
+    --muted: 210 12% 18%;
+    --muted-foreground: 210 10% 60%;
+
+    --accent: 172 100% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 10% 25%;
+    --input: 210 10% 25%;
+    --ring: 172 100% 55%;
+
+    --chart-1: 172 100% 55%;
+    --chart-2: 200 90% 55%;
+    --chart-3: 260 80% 60%;
+    --chart-4: 45 90% 60%;
+    --chart-5: 10 90% 65%;
+
+    --sidebar-background: 210 28% 10%;
+    --sidebar-foreground: 210 15% 85%;
+    --sidebar-primary: 172 100% 55%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 210 15% 18%;
+    --sidebar-accent-foreground: 210 10% 80%;
+    --sidebar-border: 210 10% 25%;
+    --sidebar-ring: 172 100% 55%;
+  }
+
+  /* ---------- Glow & Transitions ---------- */
+  .shadow-glow {
+    box-shadow: 0 0 15px 3px hsla(172, 100%, 45%, 0.4);
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 18px 3px hsla(172, 100%, 45%, 0.6);
+    transition: box-shadow 0.25s ease;
+  }
+
+  html {
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+
+@layer base {
+
+  :root {
+    /* Light theme */
+    --background: 0 0% 100%;
+    --foreground: 220 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 10%;
+    --primary: 180 100% 50%; /* neon cyan-blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 10% 20%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
+    --accent: 180 80% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 180 100% 45%;
+
+    /* Chart / UI variants */
+    --chart-1: 180 100% 50%;
+    --chart-2: 280 80% 60%;
+    --chart-3: 40 100% 55%;
+    --chart-4: 320 85% 55%;
+    --chart-5: 200 90% 55%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* Dark theme */
+    --background: 220 15% 8%;
+    --foreground: 0 0% 100%;
+    --card: 220 15% 10%;
+    --card-foreground: 0 0% 100%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 180 100% 50%;
+    --primary-foreground: 220 15% 10%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 70%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 220 15% 10%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 180 100% 50%;
+
+    --chart-1: 180 100% 50%;
+    --chart-2: 300 80% 65%;
+    --chart-3: 45 100% 55%;
+    --chart-4: 200 100% 60%;
+    --chart-5: 120 80% 50%;
+  }
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overscroll-behavior: contain;
+  }
+  
+  /* Disable Chrome's pull-to-refresh on mobile */
+  html {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Custom styles for embedding widgets */
+iframe, .revyoos-embed-widget, .booking-widget-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix for any embedded widget that might cause horizontal scrolling */
+.booking-widget-container iframe,
+.revyoos-embed-widget iframe {
+  border: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure all content stays within bounds */
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+
+/* Property card hover effects */
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.card-hover:hover .hover-scale {
+  transform: scale(1.05);
+}
+
+/* Heart button animation */
+.heart-beat {
+  transition: transform 0.15s ease-in-out;
+}
+
+.heart-beat:hover {
+  transform: scale(1.15);
+}
+
+/* Property card highlight animation when clicked from map */
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.property-highlight {
+  animation: highlight-pulse 2s ease-out;
+  border-color: rgb(79, 70, 229);
+  border-width: 2px;
+  transition: all 0.5s ease;
+}
+
+/* Mobile swipe and zoom styles */
+.swipe-area {
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Visual feedback for swipe gestures */
+.gallery-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.gallery-indicator.left {
+  left: 10px;
+}
+
+.gallery-indicator.right {
+  right: 10px;
+}
+
+.swiping-left .gallery-indicator.right,
+.swiping-right .gallery-indicator.left {
+  opacity: 1;
+}
+
+/* Zoom transition effects */
+.transform-component-module_content__FBWxo {
+  transition: transform 0.1s ease-out !important;
+}
+
+.zooming .transform-component-module_content__FBWxo {
+  transition: none !important;
+}
+
+/* Enhanced touch interface for image gallery */
+@media (max-width: 768px) {
+  .touch-gallery {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* More visible tap areas on mobile */
+  .mobile-tap-area {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

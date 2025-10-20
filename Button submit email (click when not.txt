@@ -1,0 +1,5 @@
+Button submit email (click when not gray):
+<button class="custom-button" disabled="disabled" id="submit-button">
+    
+    <span>Send me a login link</span>
+  </button>
