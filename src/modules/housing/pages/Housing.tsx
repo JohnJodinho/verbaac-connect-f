@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Search, Filter, MapPin, Star } from 'lucide-react'
-import { Property } from '../../../types'
+import { type Property } from '../../../types'
 
 // Local mock data with real images
 const mockProperties: Property[] = [

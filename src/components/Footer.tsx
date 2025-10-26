@@ -40,9 +40,10 @@ export function Footer() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              <span className="text-2xl font-bold text-blue-600">
-                Verbaac Connect
-              </span>
+              <div className="hidden sm:flex items-baseline text-2xl">
+                <span className="font-bold text-primary">verbacc</span>
+                <span className="font-medium opacity-90 ml-1">connect</span>
+              </div>
             </motion.div>
             <p className="mt-4 text-gray-600 max-w-md">
               Connecting Nigerian students with housing, roommates, and marketplace opportunities. 

@@ -8,86 +8,78 @@ export default function Home() {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white overflow-hidden">
+      {/* MODIFICATION: Replaced blue gradient with theme's brand gradient and text-white with text-primary-foreground */}
+      <section className="bg-[linear-gradient(135deg,var(--primary)_0%,var(--secondary)_100%)] text-primary-foreground overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
-            <motion.h1 
+            <motion.h1
               className="text-4xl md:text-6xl font-bold mb-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
+              transition={{
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 0.2 
+                delay: 0.2
               }}
             >
-              Your University Life, 
-              <motion.span 
-                className="text-yellow-400"
+              Your University Life,
+              {/* MODIFICATION: Removed text-yellow-400, inherits foreground color */}
+              <motion.span
+                className="text-primary-foreground"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ 
+                transition={{
                   type: 'spring',
                   stiffness: 200,
                   damping: 20,
-                  delay: 0.6 
+                  delay: 0.6
                 }}
               >
                 {' '}Simplified
               </motion.span>
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
+              transition={{
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 0.4 
+                delay: 0.4
               }}
             >
               Find housing, connect with roommates, buy and sell items, and create secure rental agreements - all in one platform designed for Nigerian students.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
+              transition={{
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 0.8 
+                delay: 0.8
               }}
             >
+              {/* MODIFICATION: Removed all hardcoded classNames, whileHover, and whileTap.
+                  The 'AnimatedButton' component now handles all styling and animations via variants.
+              */}
               <AnimatedButton
                 variant="primary"
                 size="lg"
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: '0 10px 25px rgba(37, 99, 235, 0.3)',
-                  backgroundColor: '#1d4ed8'
-                }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/auth/register')}
               >
                 Get Started
               </AnimatedButton>
-              
+
+              {/* MODIFICATION: Changed to 'secondary' variant and removed all hardcoded styles. */}
               <AnimatedButton
                 variant="secondary"
                 size="lg"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: 'white',
-                  color: '#2563eb'
-                }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/marketplace')}
               >
                 Learn More
@@ -95,10 +87,11 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-        
+
         {/* Floating Background Elements */}
+        {/* MODIFICATION: Used theme-aware colors */}
         <motion.div
-          className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full"
+          className="absolute top-20 left-10 w-20 h-20 bg-primary-foreground/10 rounded-full"
           animate={{
             y: [0, -20, 0],
             rotate: [0, 180, 360]
@@ -110,7 +103,7 @@ export default function Home() {
           }}
         />
         <motion.div
-          className="absolute top-40 right-20 w-16 h-16 bg-yellow-400/20 rounded-full"
+          className="absolute top-40 right-20 w-16 h-16 bg-secondary/20 rounded-full"
           animate={{
             y: [0, 20, 0],
             x: [0, -10, 0]
@@ -124,23 +117,26 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white">
+      {/* MODIFICATION: Replaced bg-white with bg-background */}
+      <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ 
+            transition={{
               type: 'spring',
               stiffness: 100,
-              damping: 15 
+              damping: 15
             }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {/* MODIFICATION: Replaced text-gray-900 with text-foreground */}
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Everything You Need for University Life
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            {/* MODIFICATION: Replaced text-gray-600 with text-muted-foreground */}
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               From finding the perfect accommodation to connecting with like-minded roommates, we've got you covered.
             </p>
           </motion.div>
@@ -172,40 +168,48 @@ export default function Home() {
                 route: '/agreements'
               }
             ].map((feature, index) => (
-              <motion.div 
-                key={index} 
-                className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow bg-white border border-gray-100 cursor-pointer"
+              <motion.div
+                key={index}
+                /* MODIFICATION: 
+                   - Replaced bg-white with bg-card
+                   - Replaced border-gray-100 with border-border
+                   - Added shadow-sm for default state
+                   - Added themed hover shadow: hover:shadow-xl hover:shadow-primary/20
+                */
+                className="text-center p-6 rounded-lg transition-shadow bg-card border border-border cursor-pointer shadow-sm hover:shadow-xl hover:shadow-primary/20"
                 variants={cardVariants}
-                whileHover={{ 
+                whileHover={{
                   y: -8,
                   scale: 1.02,
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+                  // MODIFICATION: Removed hardcoded boxShadow, now handled by Tailwind classes
                 }}
-                transition={{ 
+                transition={{
                   type: 'spring',
                   stiffness: 300,
-                  damping: 20 
+                  damping: 20
                 }}
                 onClick={() => navigate(feature.route)}
               >
-                <motion.div 
+                <motion.div
                   className="text-4xl mb-4"
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.2,
-                    rotate: 5 
+                    rotate: 5
                   }}
-                  transition={{ 
+                  transition={{
                     type: 'spring',
                     stiffness: 400,
-                    damping: 10 
+                    damping: 10
                   }}
                 >
                   {feature.icon}
                 </motion.div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {/* MODIFICATION: Replaced text-gray-900 with text-foreground */}
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
+                {/* MODIFICATION: Replaced text-gray-600 with text-muted-foreground */}
+                <p className="text-muted-foreground">
                   {feature.description}
                 </p>
               </motion.div>

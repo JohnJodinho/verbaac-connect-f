@@ -10,7 +10,7 @@ export function LoadingSpinner({ size = 'md', className = '' }: { size?: 'sm' | 
 
   return (
     <motion.div
-      className={`${sizeClasses[size]} border-2 border-blue-200 border-t-blue-600 rounded-full ${className}`}
+      className={`${sizeClasses[size]} border-2 border-muted border-t-primary rounded-full ${className}`}
       animate={{ rotate: 360 }}
       transition={{
         duration: 1,
@@ -28,7 +28,7 @@ export function DotsLoader({ className = '' }: { className?: string }) {
       {[0, 1, 2].map((index) => (
         <motion.div
           key={index}
-          className="w-2 h-2 bg-blue-600 rounded-full"
+          className="w-2 h-2 bg-primary rounded-full"
           animate={{
             scale: [1, 1.5, 1],
             opacity: [0.7, 1, 0.7],
@@ -47,19 +47,19 @@ export function DotsLoader({ className = '' }: { className?: string }) {
 // Skeleton Card Loader
 export function SkeletonCard({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
+    <div className={`bg-card rounded-lg shadow-sm p-6 ${className}`}>
       <motion.div
-        className="h-4 bg-gray-200 rounded mb-4"
+        className="h-4 bg-muted rounded-lg mb-4"
         animate={{ opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       />
       <motion.div
-        className="h-3 bg-gray-200 rounded mb-2 w-3/4"
+        className="h-3 bg-muted rounded-lg mb-2 w-3/4"
         animate={{ opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
       />
       <motion.div
-        className="h-3 bg-gray-200 rounded w-1/2"
+        className="h-3 bg-muted rounded-lg w-1/2"
         animate={{ opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
       />
@@ -71,27 +71,28 @@ export function SkeletonCard({ className = '' }: { className?: string }) {
 export function PageLoader() {
   return (
     <motion.div
-      className="min-h-screen flex items-center justify-center bg-gray-50"
+      className="min-h-screen flex items-center justify-center bg-background"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <div className="text-center">
         <motion.div
-          className="text-4xl font-bold text-blue-600 mb-4"
+          className="text-4xl text-primary mb-4"
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          transition={{ 
+          transition={{
             type: 'spring',
             stiffness: 300,
-            damping: 20 
+            damping: 20
           }}
         >
-          Verbaac Connect
+          {/* Logo text according to theme guide */}
+          <span className="font-bold">verbacc</span> <span className="font-medium">connect</span>
         </motion.div>
         <LoadingSpinner size="lg" />
         <motion.p
-          className="text-gray-600 mt-4"
+          className="text-muted-foreground mt-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -104,31 +105,33 @@ export function PageLoader() {
 }
 
 // Success/Error Toast Animation Component
-export function Toast({ 
-  message, 
-  type = 'success', 
-  isVisible, 
-  onClose 
-}: { 
-  message: string; 
-  type?: 'success' | 'error' | 'info'; 
-  isVisible: boolean; 
-  onClose: () => void; 
+export function Toast({
+  message,
+  type = 'success',
+  isVisible,
+  onClose
+}: {
+  message: string;
+  type?: 'success' | 'error' | 'info';
+  isVisible: boolean;
+  onClose: () => void;
 }) {
-  const bgColors = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-blue-500',
+  
+  // Mapped to theme variables
+  const themeClasses = {
+    success: 'bg-primary text-primary-foreground', // Using primary for success
+    error: 'bg-destructive text-destructive-foreground',
+    info: 'bg-primary text-primary-foreground', // Using primary for info
   };
 
   return (
     <motion.div
-      className={`fixed top-4 right-4 ${bgColors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`}
+      className={`fixed top-4 right-4 ${themeClasses[type]} px-6 py-3 rounded-lg shadow-lg z-50`}
       initial={{ opacity: 0, y: -50, scale: 0.8 }}
-      animate={{ 
-        opacity: isVisible ? 1 : 0, 
+      animate={{
+        opacity: isVisible ? 1 : 0,
         y: isVisible ? 0 : -50,
-        scale: isVisible ? 1 : 0.8 
+        scale: isVisible ? 1 : 0.8
       }}
       exit={{ opacity: 0, y: -50, scale: 0.8 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -153,7 +156,7 @@ export function FloatingHearts({ trigger }: { trigger: boolean }) {
           {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute text-red-500 text-xl"
+              className="absolute text-secondary text-xl" // Use secondary (Coral Red) for hearts
               initial={{
                 x: Math.random() * 100,
                 y: 50,

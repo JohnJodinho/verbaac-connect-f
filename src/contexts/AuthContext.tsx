@@ -1,5 +1,5 @@
-import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
-import { User, AuthState, RegisterData } from '../types';
+import React, { createContext, useReducer, useEffect, type ReactNode } from 'react';
+import type { User, AuthState, RegisterData } from '../types';
 import { authAPI } from '../lib/api';
 import { AxiosError } from 'axios';
 

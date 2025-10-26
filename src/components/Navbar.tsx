@@ -24,64 +24,86 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout();
+    setIsMobileMenuOpen(false); // Close menu on logout
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-background border-b border-border shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Link to="/" className="text-2xl font-bold text-blue-600">
-                  Verbaac Connect
-                </Link>
-              </motion.div>
-            </div>
-            
-            {/* Navigation Links */}
-            <motion.div 
-              className="hidden sm:ml-6 sm:flex sm:space-x-8"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+        {/* MODIFICATION: Increased height from h-16 to h-20 (5rem)
+        */}
+        <div className="flex justify-between items-center h-20">
+          
+          {/* === 1. Left Section: Logo === */}
+          <motion.div
+            className="flex-shrink-0 flex items-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link to="/" className="flex items-center">
+              {/* Mobile Logo: SVG */}
+              <img 
+                src="/verbacc-logo.svg" 
+                alt="Verbacc Connect Logo" 
+                className="h-8 w-auto sm:hidden"
+                onError={(e) => (e.currentTarget.src = 'https://placehold.co/100x40/3ABEFF/FFFFFF?text=V+C&font=poppins')}
+              />
+              {/* Desktop Logo: Text (themed) */}
+              <div className="hidden sm:flex items-baseline text-2xl">
+                <span className="font-bold text-primary">verbacc</span>
+                <span className="font-medium opacity-90 ml-1">connect</span>
+              </div>
+
+            </Link>
+          </motion.div>
+          
+          {/* === 2. Center Section: Desktop Navigation (Pill) === */}
+          <motion.div
+            className="hidden sm:flex flex-1 justify-center group" // MODIFICATION: Added "group"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.1 } },
+              hidden: { opacity: 0, y: -10 }
+            }}
+          >
+            {/* MODIFICATION: 
+              - Removed 'shadow-sm'
+              - Added 'shadow-none transition-shadow duration-300'
+              - Added 'group-hover:shadow-lg group-hover:shadow-primary/30' for themed shadow
+            */}
+            <div className="flex items-center space-x-1 bg-card border border-border rounded-lg p-1 shadow-none transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-primary/30">
               {navigation.map((item, index) => {
                 const isActive = location.pathname === item.href;
                 return (
                   <motion.div
                     key={item.name}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.05 }}
+                    variants={{
+                      hidden: { opacity: 0, y: -10 },
+                      visible: { opacity: 1, y: 0, transition: { delay: 0.1 + index * 0.05 } }
+                    }}
                   >
                     <Link
                       to={item.href}
-                      className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                         isActive
-                          ? 'border-blue-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
-                      <AnimatedIcon hover={!isActive}>
-                        <item.icon className="h-4 w-4 mr-2" />
-                      </AnimatedIcon>
+                      <item.icon className="h-4 w-4 mr-2" />
                       {item.name}
                     </Link>
                   </motion.div>
                 );
               })}
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
-          {/* Right side buttons */}
-          <motion.div 
-            className="hidden sm:ml-6 sm:flex sm:items-center space-x-4"
+          {/* === 3. Right Section: Auth & Icons === */}
+          <motion.div
+            className="hidden sm:flex sm:items-center sm:space-x-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -91,205 +113,181 @@ export function Navbar() {
                 <AnimatedIcon>
                   <Link
                     to="/notifications"
-                    className="text-gray-400 hover:text-gray-500 transition-colors"
+                    className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted"
                   >
-                    <Bell className="h-6 w-6" />
+                    <Bell className="h-5 w-5" />
                   </Link>
                 </AnimatedIcon>
                 <AnimatedIcon>
                   <Link
                     to="/messages"
-                    className="text-gray-400 hover:text-gray-500 transition-colors"
+                    className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted"
                   >
-                    <MessageCircle className="h-6 w-6" />
+                    <MessageCircle className="h-5 w-5" />
                   </Link>
                 </AnimatedIcon>
-                <div className="flex items-center space-x-4">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <Link
-                      to="/dashboard"
-                      className="flex items-center text-gray-500 hover:text-gray-700 transition-colors"
-                    >
-                      <User className="h-4 w-4 mr-1" />
-                      {user?.firstName || 'Profile'}
-                    </Link>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.35 }}
-                  >
-                    <AnimatedButton size="sm" onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-1" />
-                      Logout
-                    </AnimatedButton>
-                  </motion.div>
-                </div>
+                <div className="w-px h-6 bg-border mx-2"></div>
+                <AnimatedButton variant="ghost" size="sm" >
+                  <Link to="/dashboard">
+                    <User className="h-4 w-4 mr-2" />
+                    {user?.firstName || 'Profile'}
+                  </Link>
+                </AnimatedButton>
+                <AnimatedButton variant="outline" size="sm" onClick={handleLogout}>
+                  <LogOut className="h-4 w-4" />
+                </AnimatedButton>
               </>
             ) : (
-              <div className="flex items-center space-x-4">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Link
-                    to="/login"
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  >
+              <div className="flex items-center space-x-2">
+                <AnimatedButton variant="ghost" size="sm" >
+                  <Link to="/login">
                     Sign in
                   </Link>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.35 }}
-                >
-                  <AnimatedButton size="sm">
-                    <Link to="/register">
-                      Get started
-                    </Link>
-                  </AnimatedButton>
-                </motion.div>
+                </AnimatedButton>
+                <AnimatedButton variant="primary" size="sm" >
+                  <Link to="/register">
+                    Get started
+                  </Link>
+                </AnimatedButton>
               </div>
             )}
           </motion.div>
 
-          {/* Mobile menu button */}
+          {/* === 4. Mobile Menu Button === */}
           <div className="sm:hidden flex items-center">
             <motion.button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <span className="sr-only">Open main menu</span>
-              {isMobileMenuOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
+              <AnimatePresence initial={false} mode="wait">
+                <motion.div
+                  key={isMobileMenuOpen ? 'open' : 'closed'}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <Menu className="block h-6 w-6" aria-hidden="true" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </motion.button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div 
-              className="sm:hidden"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-                {navigation.map((item, index) => {
-                  const isActive = location.pathname === item.href;
-                  return (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Link
-                        to={item.href}
-                        className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition-all duration-200 ${
-                          isActive
-                            ? 'bg-blue-50 border-blue-500 text-blue-700'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300'
-                        }`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <div className="flex items-center">
-                          <item.icon className="h-5 w-5 mr-3" />
-                          {item.name}
-                        </div>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-                
-                {/* Mobile menu additional items */}
-                <div className="border-t border-gray-200 pt-4">
+      {/* === 5. Mobile Menu Panel === */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="sm:hidden border-t border-border bg-background"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="pt-2 pb-3 space-y-1">
+              {navigation.map((item, index) => {
+                const isActive = location.pathname === item.href;
+                return (
                   <motion.div
+                    key={item.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: index * 0.05 }}
                   >
+                    <Link
+                      to={item.href}
+                      className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary/10 border-primary text-primary'
+                          : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted hover:border-border'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <item.icon className="h-5 w-5 mr-3" />
+                        {item.name}
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+            
+            {/* --- Mobile Auth Buttons --- */}
+            <div className="border-t border-border pt-4 pb-3">
+              {isAuthenticated ? (
+                <div className="px-4 space-y-3">
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <User className="h-5 w-5 mr-3" />
+                      {user?.firstName || 'Profile'}
+                    </Link>
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}>
                     <Link
                       to="/notifications"
-                      className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <div className="flex items-center">
-                        <Bell className="h-5 w-5 mr-3" />
-                        Notifications
-                      </div>
+                      <Bell className="h-5 w-5 mr-3" />
+                      Notifications
                     </Link>
                   </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.7 }}
-                  >
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
                     <Link
                       to="/messages"
-                      className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <div className="flex items-center">
-                        <MessageCircle className="h-5 w-5 mr-3" />
-                        Messages
-                      </div>
+                      <MessageCircle className="h-5 w-5 mr-3" />
+                      Messages
                     </Link>
                   </motion.div>
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }}>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
+                    >
+                      <LogOut className="h-5 w-5 mr-3" />
+                      Logout
+                    </button>
+                  </motion.div>
                 </div>
-                
-                {/* Mobile auth buttons */}
-                <div className="border-t border-gray-200 pt-4 pb-3">
-                  <div className="flex items-center px-4 space-y-3">
-                    <motion.div
-                      className="w-full"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.8 }}
-                    >
-                      <Link
-                        to="/login"
-                        className="block w-full text-center px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Sign in
-                      </Link>
-                    </motion.div>
-                  </div>
-                  <div className="mt-3 px-4">
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.9 }}
-                    >
-                      <Link
-                        to="/register"
-                        className="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-md text-base font-medium hover:bg-blue-700 transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
+              ) : (
+                <div className="px-4 space-y-3">
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                    <AnimatedButton variant="primary" size="md" className="w-full">
+                      <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
                         Get started
                       </Link>
-                    </motion.div>
-                  </div>
+                    </AnimatedButton>
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+                    <AnimatedButton variant="ghost" size="md" className="w-full">
+                      <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                        Sign in
+                      </Link>
+                    </AnimatedButton>
+                  </motion.div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
+

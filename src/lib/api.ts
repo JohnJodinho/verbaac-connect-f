@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-import { User, Property, MarketplaceItem, ApiResponse, PaginatedResponse, CartItem } from '../types';
+import axios, { type AxiosResponse } from 'axios';
+import type { User, Property, MarketplaceItem, ApiResponse, PaginatedResponse, CartItem } from '../types';
 
 // Add missing types for API responses
 interface DashboardActivity {
