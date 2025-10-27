@@ -152,7 +152,7 @@ export const propertyDetails: PropertyDetail[] = [
     title: "1 Bedroom Apartment at Rayfield Estate",
     propertyType: "Mini Flat",
     rent: {
-      amount: 600000,
+      amount: 200000,
       currency: "NGN",
       duration: "year",
     },
@@ -298,7 +298,7 @@ export const propertyDetails: PropertyDetail[] = [
       duration: "year",
     },
     location: {
-      address: "Opposite Faculty of Arts, Bauchi Road Campus, Jos, Plateau State",
+      address: "Forestry, Bauchi Road Campus, Jos, Plateau State",
       googlePin: "https://goo.gl/maps/y9R2fDz3LV8zTqgt9",
     },
     rating: {
