@@ -1,16 +1,171 @@
 // Core user types
+// This is the (stubbed) User interface, as referenced by Property
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
-  role: UserRole;
-  university?: string;
-  studentId?: string;
-  profileImage?: string;
+  role: 'user' | 'landlord';
   isVerified: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+// This is the existing Property type
+export interface Property {
+  id: string;
+  title: string;
+  propertyType: string;
+  rent: {
+    amount: number;
+    currency: 'NGN';
+    duration: 'year' | 'month';
+  };
+  location: {
+    address: string;
+    googlePin?: string; // Optional Google Maps link
+  };
+  rating: {
+    average: number;
+    reviewCount: number;
+  };
+  landlord: {
+    name: string;
+    verified: boolean;
+    id: string; // Added landlord ID
+  };
+  availability: 'Available' | 'Taken' | 'Pending';
+  topAmenities: string[];
+  thumbnailImage: string;
+  images: string[];
+  lastUpdated: string;
+  highlighted: boolean;
+  description: string;
+  rules: string[];
+}
+
+// --- NEWLY ADDED ---
+// The comprehensive type for the Property Details page
+export interface PropertyDetail extends Property {
+  // --- Physical Property Information ---
+  dimensions: {
+    roomSize: string; // e.g. "12x14 ft"
+    totalArea?: string; // optional total size (sqm)
+    floorLevel?: string; // e.g. "Ground floor", "1st floor"
+  };
+
+  bathroom: {
+    type: 'Private' | 'Shared';
+    count?: number;
+  };
+
+  kitchen: {
+    access: 'Private' | 'Shared' | 'None';
+    hasSink?: boolean;
+  };
+
+  utilities: {
+    water: boolean;
+    electricity: boolean;
+    wasteDisposal: boolean;
+    internet?: boolean;
+    prepaidMeter?: boolean;
+    others?: string[];
+  };
+
+  security: {
+    gated: boolean;
+    fenced: boolean;
+    securityGuard?: boolean;
+    streetLight?: boolean;
+    neighborhoodWatch?: boolean;
+    cctv?: boolean;
+  };
+
+  proximity: {
+    toCampus: string; // e.g. "10 mins walk to UNIJOS Main Gate"
+    toMarket?: string; // e.g. "5 mins to Terminus Market"
+    toBusStop?: string; // e.g. "2 mins walk"
+  };
+
+  // --- Media & Virtual Experience ---
+  media: {
+    videoTour?: string; // Video URL
+    view360?: string; // Link to 360° image
+    mapEmbed?: string; // Embed map or Google Map link
+  };
+
+  // --- Additional Metadata ---
+  metadata: {
+    propertyCode: string; // Internal tracking e.g. VC-HS-2025-001
+    verifiedDate: string; // e.g. "2025-10-20"
+    viewsCount?: number;
+    featured?: boolean;
+  };
+
+  // --- Landlord / Agent Contact & Engagement ---
+  // Override the landlord type from base Property
+  landlord: {
+    name: string;
+    verified: boolean;
+    id: string;
+    contactNumber?: string;
+    whatsapp?: string;
+    email?: string;
+    agencyName?: string;
+    profileImage?: string;
+    description?: string; // short bio or intro
+  };
+
+  // --- Ratings & Reviews ---
+  reviews: {
+    cleanliness: number;
+    safety: number;
+    power: number;
+    water: number;
+    value: number;
+  };
+  reviewList: Array<{
+    userId: string;
+    userName: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
+
+  // --- Social & Interaction ---
+  roommates?: Array<{
+    id: string;
+    name: string;
+    gender?: 'Male' | 'Female' | 'Other';
+    contact?: string;
+    availability: boolean;
+  }>;
+
+  nearbyFacilities?: Array<{
+    name: string;
+    type: 'Market' | 'Eatery' | 'Pharmacy' | 'Hospital' | 'Shop' | 'ATM' | 'Bus Stop';
+    distance: string; // e.g. "3 mins walk"
+    googleMapLink?: string;
+  }>;
+
+  // --- Environmental Ratings ---
+  environment: {
+    noiseLevel: 'Low' | 'Moderate' | 'High';
+    powerSupplyRating: number; // 1-5
+    waterAvailabilityRating: number; // 1-5
+  };
+
+  // --- Payment & Rental Terms ---
+  paymentTerms: {
+    frequency: 'Monthly' | 'Yearly' | 'Bi-annual';
+    negotiable: boolean;
+    depositRequired?: boolean;
+    depositAmount?: number;
+  };
+
+  // --- Rules & Additional Info ---
+  additionalNotes?: string;
 }
 
 export type UserRole = 'student' | 'landlord' | 'admin';
@@ -37,21 +192,7 @@ export interface RegisterData {
 }
 
 // Housing types
-export interface Property {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  images: string[];
-  amenities: string[];
-  rules: string[];
-  landlordId: string;
-  landlord: User;
-  isAvailable: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 export interface ExitNotice {
   id: string;

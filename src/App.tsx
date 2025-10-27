@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Context Providers
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 // Route Protection
 import ProtectedRoute from './components/ProtectedRoute';
@@ -24,6 +24,8 @@ import Notifications from './modules/notifications/pages/Notifications';
 import Messages from './modules/messaging/pages/Messages';
 import NotFound from './modules/error-pages/pages/NotFound';
 
+import PropertyDetails from './modules/housing/pages/PropertyDetails';
+
 function App() {
   return (
     <AuthProvider>
@@ -34,6 +36,7 @@ function App() {
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
               <Route path="housing" element={<Housing />} />
+              <Route path="/housing/:id" element={<PropertyDetails />} />
               <Route path="marketplace" element={<Marketplace />} />
               <Route path="roommates" element={<Roommates />} />
               <Route path="agreements" element={<Agreements />} />
