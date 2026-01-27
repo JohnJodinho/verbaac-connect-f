@@ -1,4 +1,0 @@
-Enter email box:
-<div class="input-row">
-  <input class="mui-custom-input" id="loginId" type="text" name="loginId" key="" value="" autocapitalize="none" autocomplete="on" autocorrect="off" spellcheck="false" autofocus="autofocus" placeholder="Your email address" style="">
-</div>
