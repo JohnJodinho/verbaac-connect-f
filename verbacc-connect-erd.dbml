@@ -1,0 +1,660 @@
+// --- DOMAIN 0: GEOGRAPHY & SCALING ---
+
+Table states {
+  id uuid [pk]
+  name varchar(100) [not null, unique]
+  code varchar(5) [not null, unique, note: 'e.g., PL for Plateau, LA for Lagos']
+  created_at timestamptz [default: `now()`]
+}
+
+Table cities {
+  id uuid [pk]
+  state_id uuid [ref: > states.id]
+  name varchar(100) [not null]
+  code varchar(5) [not null, note: 'e.g., JSN for Jos North, IKD for Ikorodu']
+  created_at timestamptz [default: `now()`]
+  
+  indexes {
+    (state_id, code) [unique]
+  }
+}
+
+Table zones {
+  id uuid [pk]
+  city_id uuid [ref: > cities.id]
+  name varchar(100) [not null]
+  code varchar(5) [not null, note: 'e.g., NRG for Naraguta']
+  created_at timestamptz [default: `now()`]
+  
+  indexes {
+    (city_id, code) [unique]
+  }
+}
+
+
+// --- DOMAIN 1: IDENTITY & ROLES ---
+
+Table users {
+  id uuid [pk, note: 'Global unique identity']
+  first_name varchar(200) [not null, note: ""]
+  last_name varchar(200) [not null, note: ""]
+  middle_name varchar(200) [note: ""]
+  email varchar(255) [unique, not null, note: 'Primary login credential']
+  gender gender_type [not null, note: "Critical for housing"]
+  date_of_birth Date [not null, note: "Ensures users are 18+ for legal rent and sales contracts."]
+  password_hash text [not null]
+  phone_number varchar(20) [unique, not null, note: 'WhatsApp-enabled with OTP verification']
+  status user_status [default: 'active', note: 'Supports soft deletes and bans']
+  profile_photo_url text [note: 'Optional personal or company logo']
+  created_at timestamptz [default: `now()`]
+  
+  Note: 'The foundation for role switching and on-demand persona activation.'
+}
+
+Enum user_status {
+  active
+  deactivated
+  banned
+}
+
+Enum gender_type {
+  male
+  female
+}
+
+Table roles_registry {
+  user_id uuid [pk, ref: > users.id]
+  role_name role_type [pk]
+  unlocked_at timestamptz [default: `now()`]
+
+  Note: 'Maps user to their unlocked professional and consumer roles.'
+}
+
+Enum role_type {
+  consumer
+  seller
+  landlord
+  agent
+  ambassador
+  admin
+}
+
+// --- DOMAIN 2: CONSUMER PERSONA (DEMAND SIDE) ---
+
+Table consumer_profiles {
+  user_id uuid [pk, ref: - users.id]
+  user_name varchar(150) [not null, unique, note: ""]
+  global_prefs jsonb [note: 'General user preferences']
+  
+  Note: 'The Consumer Wrapper serving as the parent for specialized demand profiles.'
+}
+
+Table tenant_sub_profiles {
+  user_id uuid [pk, ref: - consumer_profiles.user_id]
+  institution varchar(255) [null, note: 'e.g., UNIJOS']
+  matric_no varchar(50) [null, note: 'Student identification']
+  level int [null, note: 'Current academic level']
+  preferred_zones text[] [note: 'Desired housing areas (e.g., Naraguta, Village)']
+  
+  Note: 'Handles specialized data for the accommodation demand context.'
+}
+
+Table roommate_preferences {
+  user_id uuid [pk, ref: - tenant_sub_profiles.user_id]
+  status roommate_status [default: roommate_status.not_searching]
+  intent matching_intent [not null, note: "Distinguishes between Hosts and Seekers"]
+  current_listing_id uuid [null, ref: > listings.id, note: "The room the host currently occupies"]
+  search_prefs jsonb [note: 'Includes: gender_pref, smoker_allowed, study_habits, curfew, etc.']
+
+  budget_range_min numeric(15, 2)
+  budget_range_max numeric(15, 2)
+  is_verified_only boolean [default: true, note: "Only match with verified students"]
+  last_active_at timestamptz [default: `now()`]
+
+  Note: "The demand side for roommate matching. Linked 1:1 with tenant profiles. "
+}
+
+Enum roommate_status {
+  not_searching
+  searching
+  agreement_pending
+  matched
+}
+
+Enum matching_intent {
+  hosting_roommate
+  seeking_roommate
+}
+
+Table roommate_agreements {
+  id uuid [pk]
+  listing_id uuid [ref: > listings.id]
+  primary_tenant_id uuid [ref: > users.id, note: 'The original lease holder']
+  
+  // Agreement Meta
+  status agreement_status [default: agreement_status.pending]
+  total_slots_filled int [default: 1]
+  terms_json jsonb [note: 'Shared rules for the specific unit']
+  
+  created_at timestamptz [default: `now()`]
+}
+
+Table agreement_participants {
+  id uuid [pk]
+  agreement_id uuid [ref: > roommate_agreements.id]
+  tenant_id uuid [ref: > users.id]
+  share_percentage numeric(5, 2) [note: 'e.g., 50.00 for two people splitting']
+  signed_at timestamptz
+  
+  indexes {
+    (agreement_id, tenant_id) [unique]
+  }
+  
+  Note: 'Allows N roommates to join a single agreement based on max_occupancy.'
+}
+
+Enum agreement_status {
+  pending
+  active
+  dissolved
+  disputed
+}
+
+Table buyer_sub_profiles {
+  user_id uuid [pk, ref: - consumer_profiles.user_id]
+  default_shipping_address text
+  saved_categories jsonb [note: 'User-defined shopping interests']
+  
+  Note: 'Handles specialized data for the marketplace demand context.'
+}
+
+
+// --- DOMAIN 2B: SUPPLY & TRUST PERSONAS ---
+
+Table marketplace_profiles {
+  user_id uuid [pk, ref: - users.id]
+  display_id varchar(50) [unique, note: 'Format: SLR-YEAR-SEQ']
+  shop_name varchar(255)
+  seller_rating numeric(3, 2) [default: 0]
+  total_sales int [default: 0]
+  verification_status verification_status [default: 'pending']
+  
+  Note: 'Handles specialized data for sellers in the marketplace.' 
+}
+
+// --- ENUMS FOR LANDLORD DOMAIN ---
+
+Enum landlord_verification_status {
+  pending
+  verified
+  rejected
+}
+
+Enum contact_preference {
+  in_app_chat
+  whatsapp
+  phone_call
+  email
+}
+
+// --- UPDATED LANDLORD PROFILE ---
+
+Table landlord_profiles {
+  user_id uuid [pk, ref: - users.id]
+  display_id varchar(50) [unique, note: 'Format: LLD-YEAR-SEQ'] 
+  landlord_type landlord_business_type [note: 'Individual, Agent, or Company']
+  
+  // Business/Agency Details
+  business_name text [null, note: 'Mandatory if type is Agent or Company']
+  num_properties_managed int [default: 0, note: 'Internal tracking for growth']
+  primary_zone_id uuid [ref: > zones.id, note: 'Primary operational area']
+  
+  // KYC & Verification
+  id_type government_id_type [not null]
+  id_url text [not null, note: 'URL to clear scanned ID'] 
+  property_proof_url text [not null, note: 'C of O or Rent Agreement'] 
+  verification_status landlord_verification_status [default: 'pending']
+  
+  // Financial (Verbaac Secure Pay)
+  bank_name varchar(100) [not null]
+  account_name varchar(255) [not null, note: 'Must match legal ID/BVN']
+  account_number varchar(10) [not null]
+  payment_preference payment_pref [default: 'escrow'] 
+  tax_id varchar(100) [null, note: 'For professional/corporate compliance']
+  
+  // Communication & Status
+  preferred_contact_method contact_preference [default: contact_preference.in_app_chat]
+  is_active boolean [default: true, note: 'Admin-controlled suspension']
+  
+  // Legal & Compliance (NDPR)
+  terms_accepted_at timestamptz [note: 'Audit trail for T&C agreement']
+  data_policy_accepted_at timestamptz [note: 'Audit trail for NDPR compliance']
+  background_check_consent boolean [default: false]
+  
+  created_at timestamptz [default: `now()`]
+
+  Note: 'Operational, KYC, and Compliance data for property owners.'
+}
+
+Table agent_profiles {
+  user_id uuid [pk, ref: - users.id]
+  display_id varchar(50) [unique, note: 'Format: AGT-YEAR-SEQ']
+  agency_name varchar(255) [null] 
+  office_address text 
+  experience_years int 
+  operational_zones text[] [note: 'e.g., Naraguta, Bauchi Road'] 
+  id_type government_id_type
+  id_url text
+  proof_of_address_doc text
+  verification_status agent_verification_status
+  preferred_contact_method contact_preference [default: contact_preference.in_app_chat]
+
+  bank_name varchar(100) 
+  account_name varchar(255) 
+  account_number varchar(10) 
+  commission_preference varchar(50) 
+  bio text 
+  working_hours varchar(100) 
+  terms_accepted_at timestamptz [note: 'Audit trail for T&C agreement']
+  data_policy_accepted_at timestamptz [note: 'Audit trail for NDPR compliance']
+  background_check_consent boolean [default: false]
+
+  Note: 'Professional data for middleman agents.' 
+}
+
+Enum agent_verification_status {
+  pending
+  verified
+  rejected
+}
+
+Table ambassador_profiles {
+  user_id uuid [pk, ref: - users.id]
+  display_id varchar(50) [unique, note: 'Format: AMB-YEAR-SEQ']
+  zone_id uuid [ref: > zones.id]
+  campus_zone varchar(100) 
+  credibility_score int [default: 0] 
+  tier_level int [default: 1, note: 'Tiers 1-3'] 
+  
+  Note: 'Student verification officers acting as platform trust-builders.' 
+}
+
+Table admin_profiles {
+  user_id uuid [pk, ref: - users.id]
+  display_id varchar(50) [unique, note: 'Format: ADM-YEAR-SEQ']
+  admin_level admin_tier 
+  permissions jsonb 
+
+  Note: 'Internal staff profiles for moderation and finance.' 
+}
+
+// --- DOMAIN 3: ASSET HIERARCHY (HOUSING & MARKET) ---
+
+Table buildings {
+  id uuid [pk]
+  display_id varchar(50) [unique, note: "Format: STATE-CITY-ZONE-BLD-SEQ"]
+  zone_id uuid [ref: > zones.id]
+  owner_id uuid [ref: > users.id, note: 'The single-owner logic'] 
+  name varchar(255) [not null, note: 'e.g., Naraguta Luxury Lodge']
+  street_address text [not null]
+  landmark text [note: 'e.g., Opposite University Gate']
+  geom "geography(POINT, 4326)" [not null, note: 'Main building entrance GPS']
+  
+  
+  
+  is_active boolean [default: true, note: 'For soft-delete persistence'] 
+  created_at timestamptz [default: `now()`]
+  Note: 'The Parent asset in the property hierarchy.' 
+}
+
+Table listings {
+  id uuid [pk]
+  display_id varchar(50) [unique, note: "Format: STATE-CITY-ZONE-PRP-SEQ"]
+  building_id uuid [ref: > buildings.id, note: 'Child Room logic'] 
+  property_type_id uuid [ref: > property_types.id, note: 'Unit Type']
+  managed_by_id uuid [ref: > users.id, note: 'Landlord or Agent']
+
+  status listing_status [default: 'draft'] 
+  unit_geom "geography(POINT, 4326)" [note: 'Specific unit GPS, defaults to building geom if null']
+  room_dimensions varchar(100) 
+  allow_roommate_splitting boolean [default: false, note: 'Landlord permissiontoggle']
+  max_occupancy int [default: 1, note: "Set by landlord/Agent ("]
+  bathroom_type varchar(50) [note: 'Private/Shared'] 
+  kitchen_access varchar(50) 
+  amenities jsonb [note: 'Water, Light, Disposal, etc.'] 
+  media_urls jsonb [note: 'Images, 360 views, video tours'] 
+  last_verified_at timestamptz 
+  created_at timestamptz [default: `now()`]
+
+  Note: 'The Child asset representing specific available units.' 
+}
+
+Table listing_terms {
+  id uuid [pk]
+  listing_id uuid [ref: > listings.id]
+  base_price numeric(15, 2) [not null, note: 'Net amount intended for the provider']
+  final_price numeric(15, 2) [not null, note: 'Total cost to tenant (Base + 12% Platform Fee)']
+  frequency payment_freq [not null]
+  is_negotiable boolean [default: false]
+  deposit_required boolean [default: false]
+  deposit_amount numeric(15, 2) [default: 0]
+  created_at timestamptz [default: `now()`]
+
+  Note: 'The financial contract for a unit, including Verbaac service markups.'
+}
+
+Enum payment_freq {
+  Yearly
+  Monthly
+  Semester
+}
+
+Table property_types {
+  id uuid [pk]
+  slug varchar(100) [unique, not null, note: 'Strict lowercase kebab-case (e.g., self-contain). enforced via DB check.']
+  title varchar(150) [unique, not null, note: 'Strict Title Case (e.g., Self-Contain). Used for UI labels.']
+  description text [note: 'Defines the unit for the user.']
+  is_active boolean [default: true, note: 'Allows admins to "retire" types without breaking old data.']
+  created_at timestamptz [default: `now()`]
+
+  Note: 'The master registry for unit types. Managed by Admins to ensure zero typos in the system.'
+}
+
+
+Table nearby_facilities {
+  id uuid [pk]
+  name varchar(255) [not null]
+  category facility_category [not null]
+  location "geography(POINT, 4326)" [not null]
+  created_at timestamptz [default: `now()`]
+
+  Note: 'Master directory of hospitals, pharmacies, eateries, and campus landmarks.'
+}
+
+Enum facility_category {
+  hospital
+  pharmacy
+  eatery
+  bank_atm
+  supermarket
+  campus_gate
+  police_station
+}
+
+Table listing_facilities {
+  listing_id uuid [ref: > listings.id]
+  facility_id uuid [ref: > nearby_facilities.id]
+  distance_meters int [note: 'Pre-calculated walking/driving distance']
+  walking_time_mins int [note: 'Estimated time for students']
+
+  indexes {
+    (listing_id, facility_id) [pk]
+    distance_meters
+  }
+  
+  Note: 'Junction table to link units to amenities. Optimizes "Near me" search results.'
+}
+
+Table market_items {
+  id uuid [pk]
+  display_id varchar(50) [unique, note: 'Format: STATE-CITY-ZONE-MKT-SEQ']
+  zone_id uuid [ref: > zones.id]
+  seller_id uuid [ref: > users.id] 
+  
+  title varchar(255) [not null]
+  condition item_condition [not null]
+  quantity int [default: 1] 
+  status item_status [default: 'available'] 
+  
+  // Localized Discovery
+  pickup_landmark text [note: 'Specific point like "Lobby of Naraguta Lodge"']
+  
+  description text 
+  specs jsonb [note: 'Mandatory: brand, model, dimensions. Optional: warranty, usage_duration'] 
+  media_urls jsonb [note: 'Min 3 photos required by UI logic']
+  
+  created_at timestamptz [default: `now()`]
+
+  Note: 'The core asset record. Stores storytelling and physical metadata.'
+}
+
+Table market_logistics {
+  id uuid [pk]
+  item_id uuid [ref: > market_items.id]
+  
+  allow_pickup boolean [default: true]
+  allow_delivery boolean [default: false]
+  
+  // Future-proofing for "Verbum Logistics" integration
+  delivery_fee_type delivery_type [default: 'fixed']
+  base_delivery_fee numeric(15, 2) [default: 0]
+  
+  Note: 'Handles the bridge between the Marketplace and Verbum Rider Logistics.'
+}
+
+Enum delivery_type { 
+  fixed 
+  calculated 
+  free 
+}
+
+Table market_item_prices {
+  id uuid [pk]
+  item_id uuid [ref: > market_items.id]
+  
+  // Fee & Discount Logic
+  base_price numeric(15, 2) [not null, note: 'The price the seller wants to receive']
+  discount_price numeric(15, 2) [note: 'Optional strike-through price for sales']
+  final_price numeric(15, 2) [not null, note: 'Base + 12% Fee (Total Student pays)']
+  
+  // Business Rules
+  price_type price_negotiability [default: 'fixed']
+  is_active boolean [default: true, note: 'Current active price for the item']
+  
+  created_at timestamptz [default: `now()`]
+
+  Note: 'Handles Verbaac 12% markup and discount history.'
+}
+
+// --- ENUMS ---
+
+Enum landlord_business_type { 
+  individual
+  agent
+  company 
+}
+Enum government_id_type { 
+  national_id 
+  drivers_license 
+  voters_card 
+  passport 
+}
+Enum payment_pref { 
+  direct 
+  escrow 
+}
+Enum verification_status { 
+  pending 
+  verified 
+  rejected 
+}
+Enum admin_tier { 
+  super 
+  moderator 
+  finance 
+}
+Enum listing_status { 
+  draft 
+  pending_vetting 
+  verified 
+  occupied 
+  inactive 
+}
+Enum item_condition { 
+  new 
+  used 
+  refurbished 
+}
+Enum price_negotiability { 
+  fixed 
+  negotiable 
+}
+Enum item_status { 
+  available 
+  sold 
+  reserved 
+}
+
+
+// --- DOMAIN 4: VERBUM SECURE PAY & TRUST ---
+
+Table wallets {
+  user_id uuid [pk, ref: - users.id]
+  available_balance numeric(15, 2) [default: 0]
+  pending_balance numeric(15, 2) [default: 0]
+  
+  Note: 'Individual user ledger for rent disbursement and marketplace earnings.'
+}
+
+Table escrow_transactions {
+  id uuid [pk]
+  transaction_ref varchar(100) [unique, note: 'Monnify UID for tracking']
+  listing_id uuid [null, ref: > listings.id, note: 'Linked if housing rent']
+  item_id uuid [null, ref: > market_items.id, note: 'Linked if marketplace sale']
+  payer_id uuid [ref: > users.id]
+  total_amount numeric(15, 2)
+  status escrow_status [default: 'held']
+  created_at timestamptz [default: `now()`]
+
+  Note: 'Funds are held in escrow until delivery or move-in is confirmed.'
+}
+
+Table ledger_payout_splits {
+  id uuid [pk]
+  transaction_id uuid [ref: > escrow_transactions.id]
+  recipient_id uuid [ref: > users.id]
+  amount numeric(15, 2)
+  split_type split_category [note: 'Calculates the 12% platform fee distribution']
+
+  Note: 'A split cannot be created unless the escrow status is HELD.'
+}
+
+// --- NEW ENUMS FOR REPORTS ---
+
+Enum report_moderation_status {
+  pending_review
+  approved
+  rejected
+  flagged_for_revisit
+}
+
+// --- UPDATED VERIFICATION REPORTS ---
+
+Table verification_reports {
+  id uuid [pk]
+  display_id varchar(50) [unique, note: 'Format: RPT-YEAR-SEQ']
+  
+  // Auto-filled Links
+  ambassador_id uuid [ref: > ambassador_profiles.user_id]
+  listing_id uuid [ref: > listings.id]
+  
+  // Temporal & Spatial Data
+  visited_at timestamptz [not null, note: 'Actual time of physical visit']
+  check_in_geom "geography(POINT, 4326)" [not null, note: 'GPS capture at the door']
+  confidence_tier confidence_level [note: 'Calculated by backend based on check_in_geom vs building.geom']
+  
+  // Field Observations
+  verification_type verification_mode [default: 'physical']
+  media_urls jsonb [note: 'Ambassador-captured live photos/videos']
+  amenities_confirmed jsonb [note: 'Matches checklist: water, light, toilet, etc.']
+  
+  // Validity Checks
+  is_rent_match boolean [note: 'Does physical quote match app price?']
+  is_manager_valid boolean [note: 'Confirmation of Landlord/Agent authority']
+  
+  // POI & Discovery
+  poi_suggestions jsonb [note: 'Nearby hospitals, eateries, pharmacies tagged']
+  
+  // Moderation & Status
+  comments text
+  status report_moderation_status [default: 'pending_review']
+  moderated_by uuid [ref: > admin_profiles.user_id, null]
+  
+  created_at timestamptz [default: `now()`]
+
+  Note: 'Physical audit trail used to move listings from "pending_vetting" to "verified".'
+}
+
+// --- DOMAIN 5: COMMUNICATIONS & ENGAGEMENT ---
+
+Table chat_threads {
+  id uuid [pk]
+  context_listing_id uuid [null, ref: > listings.id]
+  context_item_id uuid [null, ref: > market_items.id]
+  created_at timestamptz [default: `now()`]
+}
+
+Table chat_participants {
+  thread_id uuid [ref: > chat_threads.id]
+  user_id uuid [ref: > users.id]
+  
+  indexes {
+    (thread_id, user_id) [pk]
+  }
+}
+
+Table messages {
+  id uuid [pk]
+  thread_id uuid [ref: > chat_threads.id]
+  sender_id uuid [ref: > users.id]
+  content text [note: 'Masked via Regex for privacy protection']
+  is_read boolean [default: false]
+  created_at timestamptz [default: `now()`]
+}
+
+Table notifications {
+  id uuid [pk]
+  recipient_id uuid [ref: > users.id]
+  type varchar(50)
+  payload jsonb
+  is_read boolean [default: false]
+  created_at timestamptz [default: `now()`]
+}
+
+Table reviews {
+  id uuid [pk]
+  reviewer_id uuid [ref: > users.id]
+  listing_id uuid [null, ref: > listings.id]
+  item_id uuid [null, ref: > market_items.id]
+  rating int [note: '1-5 stars']
+  comment text
+  // Housing specific metrics
+  cleanliness_rating int [null]
+  safety_rating int [null]
+  value_rating int [null]
+  created_at timestamptz [default: `now()`]
+}
+
+// --- ENUMS FOR DOMAINS 4 & 5 ---
+
+Enum escrow_status { 
+  held 
+  released 
+  disputed 
+}
+Enum split_category { 
+  landlord_88 
+  agent_3 
+  ambassador_2 
+  verbaac_7 
+  verbaac_10 
+}
+Enum confidence_level { 
+  green_pass 
+  yellow_flagged 
+  red_blocked 
+}
+Enum verification_mode { 
+  physical 
+  virtual 
+}

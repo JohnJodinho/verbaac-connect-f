@@ -1,0 +1,287 @@
+verbaac-connect-frontend/
+├── .env
+├── .env.example
+├── .git/
+│   ├── COMMIT_EDITMSG
+│   ├── config
+│   ├── description
+│   ├── HEAD
+│   ├── hooks/
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   ├── update.sample
+│   ├── index
+│   ├── info/
+│   │   └── exclude
+│   ├── logs/
+│   │   ├── HEAD
+│   │   └── refs/
+│   │       ├── heads/
+│   │       │   └── main
+│   │       └── remotes/
+│   │           └── origin/
+│   │               └── main
+│   ├── objects/
+│   │   ├── info/
+│   │   ├── pack/
+│   │   ├── 00/
+│   │   ├── 01/
+│   │   ├── 02/
+│   │   ├── 03/
+│   │   ├── 04/
+│   │   ├── 05/
+│   │   ├── 08/
+│   │   ├── 09/
+│   │   ├── 0a/
+│   │   ├── 0c/
+│   │   ├── 0d/
+│   │   ├── 0e/
+│   │   ├── 0f/
+│   │   ├── 11/
+│   │   ├── 15/
+│   │   ├── 17/
+│   │   ├── 1a/
+│   │   ├── 1b/
+│   │   ├── 1c/
+│   │   ├── 1d/
+│   │   ├── 1e/
+│   │   ├── 1f/
+│   │   ├── 22/
+│   │   ├── 23/
+│   │   ├── 25/
+│   │   ├── 27/
+│   │   ├── 2c/
+│   │   ├── 2d/
+│   │   ├── 2e/
+│   │   ├── 30/
+│   │   ├── 34/
+│   │   ├── 35/
+│   │   ├── 36/
+│   │   ├── 38/
+│   │   ├── 39/
+│   │   ├── 3a/
+│   │   ├── 3e/
+│   │   ├── 40/
+│   │   ├── 41/
+│   │   ├── 43/
+│   │   ├── 44/
+│   │   ├── 46/
+│   │   ├── 47/
+│   │   ├── 4a/
+│   │   ├── 50/
+│   │   ├── 51/
+│   │   ├── 52/
+│   │   ├── 53/
+│   │   ├── 57/
+│   │   ├── 58/
+│   │   ├── 5a/
+│   │   ├── 5b/
+│   │   ├── 5c/
+│   │   ├── 5d/
+│   │   ├── 65/
+│   │   ├── 66/
+│   │   ├── 68/
+│   │   ├── 6a/
+│   │   ├── 6b/
+│   │   ├── 6c/
+│   │   ├── 6d/
+│   │   ├── 75/
+│   │   ├── 77/
+│   │   ├── 79/
+│   │   ├── 7b/
+│   │   ├── 7c/
+│   │   ├── 7d/
+│   │   ├── 7e/
+│   │   ├── 80/
+│   │   ├── 86/
+│   │   ├── 8a/
+│   │   ├── 8c/
+│   │   ├── 8f/
+│   │   ├── 90/
+│   │   ├── 93/
+│   │   ├── 95/
+│   │   ├── 98/
+│   │   ├── 9a/
+│   │   ├── 9b/
+│   │   ├── 9c/
+│   │   ├── 9d/
+│   │   ├── a0/
+│   │   ├── a2/
+│   │   ├── a4/
+│   │   ├── a5/
+│   │   ├── a8/
+│   │   ├── a9/
+│   │   ├── ab/
+│   │   ├── ac/
+│   │   ├── ae/
+│   │   ├── af/
+│   │   ├── b0/
+│   │   ├── b1/
+│   │   ├── b3/
+│   │   ├── b6/
+│   │   ├── b7/
+│   │   ├── b8/
+│   │   ├── ba/
+│   │   ├── bb/
+│   │   ├── bc/
+│   │   ├── bd/
+│   │   ├── c0/
+│   │   ├── c1/
+│   │   ├── c5/
+│   │   ├── c6/
+│   │   ├── c7/
+│   │   ├── c8/
+│   │   ├── c9/
+│   │   ├── cb/
+│   │   ├── cf/
+│   │   ├── d2/
+│   │   ├── d3/
+│   │   ├── d4/
+│   │   ├── d5/
+│   │   ├── d6/
+│   │   ├── d9/
+│   │   ├── da/
+│   │   ├── db/
+│   │   ├── dc/
+│   │   ├── dd/
+│   │   ├── df/
+│   │   ├── e0/
+│   │   ├── e3/
+│   │   ├── e4/
+│   │   ├── e5/
+│   │   ├── e6/
+│   │   ├── e7/
+│   │   ├── e9/
+│   │   ├── ea/
+│   │   ├── eb/
+│   │   ├── ec/
+│   │   ├── f8/
+│   │   ├── fc/
+│   │   ├── fe/
+│   │   └── ff/
+│   └── refs/
+│       ├── heads/
+│       │   └── main
+│       ├── remotes/
+│       │   └── origin/
+│       │       └── main
+│       └── tags/
+├── .gitignore
+├── components.json
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── public/
+│   ├── verbacc-logo.svg
+│   └── vite.svg
+├── README.md
+├── src/
+│   ├── App.tsx
+│   ├── assets/
+│   ├── components/
+│   │   ├── animated/
+│   │   │   ├── index.tsx
+│   │   │   └── LoadingComponents.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── ProtectedRoute.tsx
+│   │   └── ui/
+│   │    
+│   │       └── Button.tsx
+│   ├── contexts/
+│   │   └── AuthContext.tsx
+│   ├── data/
+│   │   └── mock-properties.ts
+│   ├── hooks/
+│   │   ├──
+│   │   ├── ThemeProvider.tsx
+│   │   ├──
+│   │   ├── useAuth.ts
+│   │   ├── 
+│   │   └── useTheme.tsx
+│   ├── index.css
+│   ├── index.ts
+│   ├── layout/
+│   │   ├── AuthLayout.tsx
+│   │   ├── DashboardLayout.tsx
+│   │   └── MainLayout.tsx
+│   ├── lib/
+│   │   ├── animations.ts
+│   │   ├── api.ts
+│   │   └── utils.ts
+│   ├── main.tsx
+│   ├── modules/
+│   │   ├── admin/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   ├── agreements/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       ├── 
+│   │   │       └── Agreements.tsx
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       ├── 
+│   │   │       ├── Login.tsx
+│   │   │       ├── 
+│   │   │       └── Register.tsx
+│   │   ├── dashboard/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       ├── 
+│   │   │       └── Dashboard.tsx
+│   │   ├── error-pages/
+│   │   │   └── pages/
+│   │   │       ├── 
+│   │   │       └── NotFound.tsx
+│   │   ├── home/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       └── Home.tsx
+│   │   ├── housing/
+│   │   │   ├── components/
+│   │   │   │   └── PropertyCard.tsx
+│   │   │   └── pages/
+│   │   │       ├── Housing.tsx
+│   │   │       └── PropertyDetails.tsx
+│   │   ├── marketplace/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       └── Marketplace.tsx
+│   │   ├── messaging/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       └── Messages.tsx
+│   │   ├── notifications/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       └── Notifications.tsx
+│   │   ├── roommates/
+│   │   │   ├── components/
+│   │   │   └── pages/
+│   │   │       └── Roommates.tsx
+│   │   └── types/
+│   │       └── index.ts
+│   ├── types/
+│   │   └── index.ts
+│   └── vite-env.d.ts
+├── tailwind.config.js
+├── Things to fix.txt
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+└── worker_errors_logs.txt

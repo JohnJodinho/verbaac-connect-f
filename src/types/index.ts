@@ -5,13 +5,28 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  role: 'user' | 'landlord';
+  middleName?: string;
+  phoneNumber: string;
+  gender: 'male' | 'female';
+  dateOfBirth: string; // ISO Date string
+  userName?: string; // Optional for now as legacy users might not have it
+  profilePhotoUrl?: string;
+  role: RoleType; // Primary/Active role logic might need adjustment, but keeping for now
   isVerified: boolean;
+  
+  // Student/Tenant Profile (Optional)
+  studentProfile?: {
+    institution: string;
+    matricNo: string;
+    level: number;
+    preferredZones?: string[];
+  } | null;
+
   createdAt: string;
   updatedAt: string;
 }
 
-// This is the existing Property type
+// This is the existing Property 
 export interface Property {
   id: string;
   title: string;
@@ -19,7 +34,7 @@ export interface Property {
   rent: {
     amount: number;
     currency: 'NGN';
-    duration: 'year' | 'month';
+    duration: 'Yearly' | 'Monthly' | 'Semester';
   };
   location: {
     address: string;
@@ -158,7 +173,7 @@ export interface PropertyDetail extends Property {
 
   // --- Payment & Rental Terms ---
   paymentTerms: {
-    frequency: 'Monthly' | 'Yearly' | 'Bi-annual';
+    frequency: 'Yearly' | 'Monthly' | 'Semester';
     negotiable: boolean;
     depositRequired?: boolean;
     depositAmount?: number;
@@ -168,7 +183,8 @@ export interface PropertyDetail extends Property {
   additionalNotes?: string;
 }
 
-export type UserRole = 'student' | 'landlord' | 'admin';
+export type UserRole = 'consumer' | 'seller' | 'landlord' | 'agent' | 'ambassador' | 'admin';
+export type RoleType = UserRole; // Alias for clarity
 
 // Authentication types
 export interface AuthState {
@@ -224,7 +240,7 @@ export interface MarketplaceItem {
   updatedAt: string;
 }
 
-export type ItemCondition = 'new' | 'like-new' | 'good' | 'fair' | 'poor';
+export type ItemCondition = 'New' | 'Used' | 'Refurbished';
 
 export interface CartItem {
   id: string;
@@ -377,3 +393,99 @@ export interface SearchFilters {
   condition?: ItemCondition;
   amenities?: string[];
 }
+
+// Wallet & Escrow types
+export interface Wallet {
+  userId: string;
+  availableBalance: number;
+  pendingBalance: number;
+  currency: 'NGN';
+}
+
+export interface EscrowTransaction {
+  id: string;
+  transactionRef: string;
+  amount: number;
+  status: 'held' | 'released' | 'disputed';
+  listingId?: string;
+  itemId?: string;
+  payerId: string;
+  payerName?: string;
+  description?: string;
+  platformFee: number;
+  netAmount: number;
+  createdAt: string;
+}
+
+export interface PayoutSplit {
+  recipientId: string;
+  amount: number;
+  splitType: 'landlord_88' | 'agent_3' | 'ambassador_2' | 'verbaac_7' | 'verbaac_10';
+}
+
+// Session types
+export interface UserSession {
+  id: string;
+  deviceName: string;
+  deviceType: 'mobile' | 'desktop' | 'tablet';
+  location: string;
+  ipAddress: string;
+  browser?: string;
+  loginAt: string;
+  isCurrent: boolean;
+}
+
+// Activity types
+export interface PersonaSwitch {
+  id: string;
+  fromRole: RoleType;
+  toRole: RoleType;
+  switchedAt: string;
+}
+
+export interface ActivityLogItem {
+  id: string;
+  type: 'persona_switch' | 'transaction' | 'profile_update' | 'login' | 'escrow';
+  description: string;
+  metadata?: Record<string, unknown>;
+  timestamp: string;
+}
+
+// Rewards types
+export interface TrustScore {
+  score: number;
+  maxScore: number;
+  factors: {
+    successfulTransactions: number;
+    confirmedMoveIns: number;
+    profileCompleteness: number;
+    verificationStatus: number;
+  };
+}
+
+export interface ReferralInfo {
+  referralCode: string;
+  referralLink: string;
+  totalReferrals: number;
+  successfulReferrals: number;
+  pendingRewards: number;
+  earnedRewards: number;
+}
+
+// Bank Account type
+export interface BankAccount {
+  id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  isPrimary: boolean;
+  createdAt: string;
+}
+
+// Password Update type
+export interface PasswordUpdateData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+

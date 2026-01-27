@@ -2,13 +2,13 @@ import type { PropertyDetail } from "@/types";
 
 export const propertyDetails: PropertyDetail[] = [
   {
-    id: "VC-HS-2025-001",
+    id: "PL-JS-NRG-PRP-001",
     title: "2 Bedroom Self-Contain at Naraguta",
     propertyType: "Self-Contain",
     rent: {
       amount: 350000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Naraguta, near University of Jos Main Campus, Jos, Plateau State",
@@ -81,7 +81,7 @@ export const propertyDetails: PropertyDetail[] = [
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.865825885326!2d8.88841751478451!3d9.886245292922272",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-001",
+      propertyCode: "PL-JS-NRG-PRP-001",
       verifiedDate: "2025-10-20",
       viewsCount: 215,
       featured: true,
@@ -148,13 +148,13 @@ export const propertyDetails: PropertyDetail[] = [
 
   // --- Second Property ---
   {
-    id: "VC-HS-2025-002",
+    id: "PL-JS-RYF-PRP-002",
     title: "1 Bedroom Apartment at Rayfield Estate",
     propertyType: "Mini Flat",
     rent: {
       amount: 200000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Rayfield Estate, Jos South, Plateau State",
@@ -228,7 +228,7 @@ export const propertyDetails: PropertyDetail[] = [
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.865825885326!2d8.89531751478451!3d9.876245292922272",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-002",
+      propertyCode: "PL-JS-RYF-PRP-002",
       verifiedDate: "2025-10-18",
       viewsCount: 342,
       featured: false,
@@ -289,13 +289,13 @@ export const propertyDetails: PropertyDetail[] = [
   },
 
   {
-    id: "VC-HS-2025-003",
+    id: "PL-JS-BAU-PRP-003",
     title: "Single Room Lodge at Bauchi Road",
     propertyType: "Student Lodge",
     rent: {
       amount: 120000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Forestry, Bauchi Road Campus, Jos, Plateau State",
@@ -362,7 +362,7 @@ export const propertyDetails: PropertyDetail[] = [
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.965725885326!2d8.87131751478451!3d9.899245292922272",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-003",
+      propertyCode: "PL-JS-BAU-PRP-003",
       verifiedDate: "2025-10-10",
       viewsCount: 189,
       featured: false,
@@ -411,13 +411,13 @@ export const propertyDetails: PropertyDetail[] = [
   // 4️⃣ Property: Shared Apartment at Zaramaganda
   // -------------------------------------------------------------------
   {
-    id: "VC-HS-2025-004",
+    id: "PL-JS-ZAR-PRP-004",
     title: "Shared Apartment at Zaramaganda",
     propertyType: "Shared Flat",
     rent: {
       amount: 250000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Zaramaganda, off Old Airport Road, Jos South, Plateau State",
@@ -479,7 +479,7 @@ export const propertyDetails: PropertyDetail[] = [
       videoTour: "https://www.youtube.com/watch?v=sBws8MSXN7A",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-004",
+      propertyCode: "PL-JS-ZAR-PRP-004",
       verifiedDate: "2025-10-21",
       viewsCount: 101,
       featured: true,
@@ -532,13 +532,13 @@ export const propertyDetails: PropertyDetail[] = [
   // 5️⃣ Property: 3-Bedroom Bungalow at Rayfield
   // -------------------------------------------------------------------
   {
-    id: "VC-HS-2025-005",
+    id: "PL-JS-RYF-PRP-005",
     title: "3 Bedroom Fully Detached Bungalow at Rayfield",
     propertyType: "Bungalow",
     rent: {
       amount: 900000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Rayfield Layout, Jos South, Plateau State",
@@ -608,7 +608,7 @@ export const propertyDetails: PropertyDetail[] = [
       videoTour: "https://www.youtube.com/watch?v=6lt2JfJdGSY",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-005",
+      propertyCode: "PL-JS-RYF-PRP-005",
       verifiedDate: "2025-10-19",
       viewsCount: 412,
       featured: true,
@@ -646,13 +646,13 @@ export const propertyDetails: PropertyDetail[] = [
   // 6️⃣ Property: Studio Apartment at Old Bukuru Park
   // -------------------------------------------------------------------
   {
-    id: "VC-HS-2025-006",
+    id: "PL-JS-BUK-PRP-006",
     title: "Studio Apartment at Old Bukuru Park",
     propertyType: "Studio Apartment",
     rent: {
       amount: 180000,
       currency: "NGN",
-      duration: "year",
+      duration: "Yearly",
     },
     location: {
       address: "Off Old Bukuru Road, Jos South, Plateau State",
@@ -715,7 +715,7 @@ export const propertyDetails: PropertyDetail[] = [
       videoTour: "https://www.youtube.com/watch?v=eX2qFMC8cFo",
     },
     metadata: {
-      propertyCode: "VC-HS-2025-006",
+      propertyCode: "PL-JS-BUK-PRP-006",
       verifiedDate: "2025-10-25",
       viewsCount: 160,
       featured: false,

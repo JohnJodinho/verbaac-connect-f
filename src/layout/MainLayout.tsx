@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Navbar } from '../components/Navbar';
-import { Footer } from '../components/Footer';
+import { Navbar } from '../components/shared/Navbar';
+import { Footer } from '../components/shared/Footer';
 
 export function MainLayout() {
   return (

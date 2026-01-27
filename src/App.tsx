@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 
 // Route Protection
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/shared/ProtectedRoute';
 
 // Layout Components
 import { MainLayout } from './layout/MainLayout';
@@ -12,19 +12,25 @@ import { AuthLayout } from './layout/AuthLayout';
 import { DashboardLayout } from './layout/DashboardLayout';
 
 // Page Components
-import Home from './modules/home/pages/Home';
+import Home from './modules/consumer/home/pages/Home';
 import Login from './modules/auth/pages/Login';
 import Register from './modules/auth/pages/Register';
-import Housing from './modules/housing/pages/Housing';
-import Marketplace from './modules/marketplace/pages/Marketplace';
-import Roommates from './modules/roommates/pages/Roommates';
-import Agreements from './modules/agreements/pages/Agreements';
-import Dashboard from './modules/dashboard/pages/Dashboard';
-import Notifications from './modules/notifications/pages/Notifications';
-import Messages from './modules/messaging/pages/Messages';
-import NotFound from './modules/error-pages/pages/NotFound';
+import Housing from './modules/consumer/housing/pages/Housing';
+import Marketplace from './modules/consumer/marketplace/pages/Marketplace';
+import Roommates from './modules/consumer/roommates/pages/Roommates';
+import AgreementsRoute from './modules/consumer/agreements/pages/AgreementsRoute';
+import Dashboard from './modules/consumer/dashboard/pages/Dashboard';
+import Profile from './modules/consumer/dashboard/pages/Profile';
+import Security from './modules/consumer/dashboard/pages/Security';
+import Activity from './modules/consumer/dashboard/pages/Activity';
+import Wallet from './modules/shared/wallet/pages/Wallet';
+import Rewards from './modules/consumer/rewards/pages/Rewards';
+import Notifications from './modules/shared/notifications/pages/Notifications';
+import Messages from './modules/shared/messaging/pages/Messages';
+import ItemDetails from './modules/consumer/marketplace/pages/ItemDetails';
+import NotFound from './modules/shared/error-pages/pages/NotFound';
 
-import PropertyDetails from './modules/housing/pages/PropertyDetails';
+import PropertyDetails from './modules/consumer/housing/pages/PropertyDetails';
 
 function App() {
   return (
@@ -38,8 +44,9 @@ function App() {
               <Route path="housing" element={<Housing />} />
               <Route path="/housing/:id" element={<PropertyDetails />} />
               <Route path="marketplace" element={<Marketplace />} />
+              <Route path="marketplace/:id" element={<ItemDetails />} />
               <Route path="roommates" element={<Roommates />} />
-              <Route path="agreements" element={<Agreements />} />
+              <Route path="agreements" element={<AgreementsRoute />} />
               <Route path="notifications" element={<Notifications />} />
               <Route path="messages" element={<Messages />} />
             </Route>
@@ -65,11 +72,11 @@ function App() {
               </ProtectedRoute>
             }>
               <Route index element={<Dashboard />} />
-              <Route path="profile" element={<div>Profile Settings</div>} />
-              <Route path="security" element={<div>Security Settings</div>} />
-              <Route path="activity" element={<div>Activity Log</div>} />
-              <Route path="wallet" element={<div>Wallet</div>} />
-              <Route path="rewards" element={<div>Rewards</div>} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="security" element={<Security />} />
+              <Route path="activity" element={<Activity />} />
+              <Route path="wallet" element={<Wallet />} />
+              <Route path="rewards" element={<Rewards />} />
             </Route>
 
             {/* 404 Not Found */}

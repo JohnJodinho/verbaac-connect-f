@@ -1,5 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { User, Property, MarketplaceItem, ApiResponse, PaginatedResponse, CartItem } from '../types';
+import { useAuthStore } from '@/store/useAuthStore';
 
 // Add missing types for API responses
 interface DashboardActivity {
@@ -11,7 +12,7 @@ interface DashboardActivity {
   metadata?: Record<string, unknown>;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -27,6 +28,12 @@ apiClient.interceptors.request.use(
     const token = localStorage.getItem('verbaac_auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    // Add Active Persona Header
+    const activeRole = useAuthStore.getState().activeRole;
+    if (activeRole && activeRole !== 'guest') {
+      config.headers['X-Active-Persona'] = activeRole;
     }
     return config;
   },
