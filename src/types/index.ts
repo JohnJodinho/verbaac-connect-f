@@ -39,6 +39,10 @@ export interface Property {
   location: {
     address: string;
     googlePin?: string; // Optional Google Maps link
+    geoLocation?: {
+        lat: number;
+        lng: number;
+    };
   };
   rating: {
     average: number;
@@ -489,3 +493,17 @@ export interface PasswordUpdateData {
   confirmPassword: string;
 }
 
+// Seller Profile type
+export interface SellerProfile {
+  displayId: string;         // SLR-YEAR-SEQ format
+  userName: string;          // Unique seller handle
+  profilePhotoUrl?: string;
+  bankDetails: {
+    bankName: string;
+    bankCode: string;
+    accountNumber: string;
+    accountName: string;
+  };
+  isVerified: boolean;
+  createdAt: string;
+}

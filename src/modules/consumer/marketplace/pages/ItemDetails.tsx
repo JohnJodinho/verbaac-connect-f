@@ -39,7 +39,7 @@ export default function ItemDetails() {
   // --- Handlers ---
   const handleSimulatePayment = () => {
       // In real app, this triggers payment modal
-      alert("Opening Verbaac Secure Pay... (Simulated)");
+      alert("Opening Verbacc Secure Pay... (Simulated)");
       setTimeout(() => {
           setHasPaidIntoEscrow(true);
       }, 1500);
@@ -121,7 +121,7 @@ export default function ItemDetails() {
                   <div className="p-4 bg-muted/30 rounded-xl border border-border flex items-baseline justify-between">
                        <div>
                            <div className="text-3xl font-bold text-primary">{formattedPrice}</div>
-                           <div className="text-xs text-muted-foreground mt-1">Includes Verbaac Protection Fee</div>
+                           <div className="text-xs text-muted-foreground mt-1">Includes Verbacc Protection Fee</div>
                        </div>
                        {!item.isAvailable && (
                            <div className="px-3 py-1 bg-destructive/10 text-destructive text-sm font-bold rounded-full">
@@ -212,7 +212,7 @@ export default function ItemDetails() {
                   <div className="flex items-center gap-3 p-3 bg-blue-50 text-blue-800 rounded-lg text-sm">
                       <ShieldCheck className="w-5 h-5 shrink-0" />
                       <div>
-                          <span className="font-bold">Verbaac Money Back Guarantee.</span>
+                          <span className="font-bold">Verbacc Money Back Guarantee.</span>
                           <span className="opacity-80 ml-1">Your funds are held in escrow until you verify the item in person.</span>
                       </div>
                   </div>

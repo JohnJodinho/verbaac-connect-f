@@ -16,6 +16,9 @@ export const marketItems: MarketplaceItem[] = [
       firstName: "Chidi",
       lastName: "Okonkwo",
       role: "seller",
+      phoneNumber: "08000000000",
+      gender: "male",
+      dateOfBirth: "1990-01-01",
       isVerified: true,
       createdAt: "2025-01-10",
       updatedAt: "2025-01-10"
@@ -42,6 +45,9 @@ export const marketItems: MarketplaceItem[] = [
       firstName: "Amina",
       lastName: "Hassan",
       role: "seller",
+      phoneNumber: "08000000000",
+      gender: "female",
+      dateOfBirth: "1992-01-01",
       isVerified: true,
       createdAt: "2025-01-12",
       updatedAt: "2025-01-12"
@@ -67,6 +73,9 @@ export const marketItems: MarketplaceItem[] = [
         firstName: "David",
         lastName: "Kure",
          role: "seller",
+      phoneNumber: "08000000000",
+      gender: "male",
+      dateOfBirth: "1994-01-01",
       isVerified: false,
       createdAt: "2025-01-15",
       updatedAt: "2025-01-15"
@@ -92,6 +101,9 @@ export const marketItems: MarketplaceItem[] = [
         firstName: "Sarah",
         lastName: "Mike",
          role: "seller",
+      phoneNumber: "08000000000",
+      gender: "female",
+      dateOfBirth: "1996-01-01",
       isVerified: true,
       createdAt: "2025-01-18",
       updatedAt: "2025-01-18"

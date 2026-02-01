@@ -10,6 +10,7 @@ import {
   Map, Video, Image as ImageIcon, Phone, HomeIcon
 } from 'lucide-react';
 import { propertyDetails } from '@/data/mock-properties';
+import { PropertyMap } from '@/modules/consumer/housing/components/PropertyMap';
 
 import { GuestLock } from '@/components/shared/GuestLock';
 import { useAuth } from '@/hooks/useAuth';
@@ -258,10 +259,12 @@ useEffect(() => {
                   </div>
                 )}
                 {mediaTab === 'Map' && (
-                  <div className="h-96 w-full rounded-md bg-muted flex items-center justify-center text-muted-foreground relative">
-                     <GuestLock blur={false} fallbackText="Sign in to view map location" className="w-full h-full flex items-center justify-center">
-                         <span>Map Embed Placeholder ({property.location.address})</span>
-                     </GuestLock>
+                  <div className="w-full">
+                     <PropertyMap 
+                        zoneName={property.location.address.split(',')[0]} 
+                        coordinates={property.location.geoLocation}
+                        hasEscrowPayment={false} // Would come from real state in prod
+                     />
                   </div>
                 )}
                 {mediaTab === 'Video' && (

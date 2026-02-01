@@ -8,7 +8,7 @@ import { ChevronRight, ChevronLeft, Loader2, User,  GraduationCap, School, Hash,
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRegistrationStore } from '@/modules/auth/store/useRegistrationStore';
 import { step1Schema, step2Schema, type Step1Data, type Step2Data } from '@/modules/auth/schemas/registration';
-import { authApi } from '@/modules/auth/api/auth.api';
+import { consumerService } from '@/modules/consumer/api/consumer.service';
 import { AnimatedButton, AnimatedCard } from '@/components/animated';
 
 export default function Register() {
@@ -65,17 +65,17 @@ export default function Register() {
         // Combine stored step 1 data with current step 2 data
         // Log full request payload
         console.log('Full Request Payload:', { ...formData, ...data });
-        const fullData = { ...formData, ...data } as import('../api/auth.api').RegistrationData;
+        const fullData = { ...formData, ...data } as import('@/modules/consumer/api/consumer.service').ConsumerSignUpPayload;
         
-        const response = await authApi.registerConsumer(fullData);
+        const response = await consumerService.signUp(fullData);
         
-        if (response.data.success && response.data.data) {
-             const { user, token } = response.data.data;
+        if (response.success && response.data) {
+             const { user, token } = response.data;
              login(user, token);
              reset(); // Clear wizard state
              navigate('/dashboard');
         } else {
-             setError(response.data.message || 'Registration failed');
+             setError(response.message || 'Registration failed');
         }
     } catch (err) {
         console.error('Registration Error:', err);
@@ -235,7 +235,7 @@ export default function Register() {
                              
                              {/* Custom Switch UI */}
                              <div className={`w-11 h-6 rounded-full transition-colors flex items-center px-0.5 ${isStudent ? 'bg-primary' : 'bg-input'}`}>
-                                 <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${isStudent ? 'translate-x-[20px]' : 'translate-x-0'}`} />
+                                 <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${isStudent ? 'translate-x-5' : 'translate-x-0'}`} />
                              </div>
                              {/* Hidden real checkbox for form binding */}
                              <input type="checkbox" {...form2.register('isStudent')} className="hidden" />
@@ -286,7 +286,7 @@ export default function Register() {
                         <AnimatedButton type="button" variant="outline" size="lg" onClick={() => setStep(1)} className="flex-1 bg-background">
                             <ChevronLeft className="mr-2 w-4 h-4" /> Back
                         </AnimatedButton>
-                        <AnimatedButton type="submit" variant="primary" size="lg" className="flex-[2]" disabled={isSubmitting}>
+                        <AnimatedButton type="submit" variant="primary" size="lg" className="flex-[2_2_0%]" disabled={isSubmitting}>
                             {isSubmitting ? <Loader2 className="animate-spin w-5 h-5" /> : `Complete Setup`}
                         </AnimatedButton>
                     </div>

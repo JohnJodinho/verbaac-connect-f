@@ -103,9 +103,10 @@ export function AnimatedButton({
 interface AnimatedCardProps extends HTMLMotionProps<'div'> {
   children: ReactNode;
   hover?: boolean;
+  delay?: number;
 }
 
-export function AnimatedCard({ children, hover = true, className = '', ...props }: AnimatedCardProps) {
+export function AnimatedCard({ children, hover = true, className = '', delay = 0, ...props }: AnimatedCardProps) {
   return (
     <motion.div
       variants={cardVariants}
@@ -113,6 +114,7 @@ export function AnimatedCard({ children, hover = true, className = '', ...props 
       animate="animate"
       whileHover={hover ? "hover" : undefined}
       whileTap={hover ? "tap" : undefined}
+      transition={{ delay }}
       className={`bg-card rounded-lg shadow-sm border border-border ${className}`}
       {...props}
     >

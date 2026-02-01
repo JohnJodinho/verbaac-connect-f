@@ -69,7 +69,7 @@ export function PasswordManagement() {
     const result = passwordSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof PasswordFormData, string>> = {};
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const path = err.path[0] as keyof PasswordFormData;
         fieldErrors[path] = err.message;
       });

@@ -14,9 +14,10 @@ export function Footer() {
         damping: 15 
       }}
     >
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      {/* Reduced padding on mobile */}
+      <div className="max-w-7xl mx-auto py-8 md:py-12 px-4 md:px-6 lg:px-8">
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-4 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -27,9 +28,9 @@ export function Footer() {
             staggerChildren: 0.1 
           }}
         >
-          {/* Company Info */}
+          {/* Company Info - Full width on mobile */}
           <motion.div 
-            className="col-span-1 md:col-span-2"
+            className="col-span-2 md:col-span-2"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 }
@@ -40,12 +41,12 @@ export function Footer() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              <div className="hidden sm:flex items-baseline text-2xl">
+              <div className="flex items-baseline text-xl md:text-2xl">
                 <span className="font-bold text-primary">verbacc</span>
                 <span className="font-medium opacity-90 ml-1">connect</span>
               </div>
             </motion.div>
-            <p className="mt-4 text-gray-600 max-w-md">
+            <p className="mt-3 md:mt-4 text-sm md:text-base text-gray-600 max-w-md">
               Connecting Nigerian students with housing, roommates, and marketplace opportunities. 
               Building communities, one connection at a time.
             </p>
@@ -58,10 +59,10 @@ export function Footer() {
               visible: { opacity: 1, y: 0 }
             }}
           >
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
+            <h3 className="text-xs md:text-sm font-semibold text-gray-900 tracking-wider uppercase">
               Product
             </h3>
-            <ul className="mt-4 space-y-4">
+            <ul className="mt-3 md:mt-4 space-y-2 md:space-y-4">
               {[
                 { to: "/housing", label: "Housing" },
                 { to: "/marketplace", label: "Marketplace" },
@@ -75,7 +76,7 @@ export function Footer() {
                 >
                   <Link 
                     to={link.to} 
-                    className="text-base text-gray-500 hover:text-gray-900 transition-colors"
+                    className="text-sm md:text-base text-gray-500 hover:text-gray-900 active:text-gray-700 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -91,10 +92,10 @@ export function Footer() {
               visible: { opacity: 1, y: 0 }
             }}
           >
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
+            <h3 className="text-xs md:text-sm font-semibold text-gray-900 tracking-wider uppercase">
               Support
             </h3>
-            <ul className="mt-4 space-y-4">
+            <ul className="mt-3 md:mt-4 space-y-2 md:space-y-4">
               {[
                 { to: "/about", label: "About" },
                 { to: "/faq", label: "FAQ" },
@@ -108,7 +109,7 @@ export function Footer() {
                 >
                   <Link 
                     to={link.to} 
-                    className="text-base text-gray-500 hover:text-gray-900 transition-colors"
+                    className="text-sm md:text-base text-gray-500 hover:text-gray-900 active:text-gray-700 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -119,14 +120,14 @@ export function Footer() {
         </motion.div>
 
         <motion.div 
-          className="mt-8 border-t border-gray-200 pt-8"
+          className="mt-6 md:mt-8 border-t border-gray-200 pt-6 md:pt-8"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <p className="text-base text-gray-400 text-center">
-            &copy; 2025 Verbaac Connect. All rights reserved.
+          <p className="text-sm md:text-base text-gray-400 text-center">
+            &copy; 2025 Verbacc Connect. All rights reserved.
           </p>
         </motion.div>
       </div>

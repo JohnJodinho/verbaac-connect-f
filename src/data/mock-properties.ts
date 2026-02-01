@@ -13,6 +13,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Naraguta, near University of Jos Main Campus, Jos, Plateau State",
       googlePin: "https://goo.gl/maps/4t8tYbQYxBvWzS3U7",
+      geoLocation: { lat: 9.9565, lng: 8.8884 }, // Naraguta area
     },
     rating: {
       average: 4.3,
@@ -159,6 +160,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Rayfield Estate, Jos South, Plateau State",
       googlePin: "https://goo.gl/maps/b4s5Q4J4nK3LqXQW8",
+      geoLocation: { lat: 9.8565, lng: 8.9053 }, // Rayfield area
     },
     rating: {
       average: 4.7,
@@ -300,6 +302,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Forestry, Bauchi Road Campus, Jos, Plateau State",
       googlePin: "https://goo.gl/maps/y9R2fDz3LV8zTqgt9",
+      geoLocation: { lat: 9.9265, lng: 8.8913 }, // Bauchi Road area
     },
     rating: {
       average: 4.0,
@@ -422,6 +425,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Zaramaganda, off Old Airport Road, Jos South, Plateau State",
       googlePin: "https://goo.gl/maps/HxZjN4cYz6A8kXGz5",
+      geoLocation: { lat: 9.8265, lng: 8.8753 }, // Zaramaganda area
     },
     rating: {
       average: 4.2,
@@ -543,6 +547,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Rayfield Layout, Jos South, Plateau State",
       googlePin: "https://goo.gl/maps/DeTjJ6VhG2y7Mghq8",
+      geoLocation: { lat: 9.8495, lng: 8.9153 }, // Rayfield Layout area
     },
     rating: {
       average: 4.8,
@@ -657,6 +662,7 @@ export const propertyDetails: PropertyDetail[] = [
     location: {
       address: "Off Old Bukuru Road, Jos South, Plateau State",
       googlePin: "https://goo.gl/maps/P9x7VQ1VRy84n8EL7",
+      geoLocation: { lat: 9.8065, lng: 8.8653 }, // Old Bukuru Park area
     },
     rating: {
       average: 4.5,

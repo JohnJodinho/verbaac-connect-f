@@ -1,27 +1,41 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Building, ShoppingBag, Users, FileText, Bell, MessageCircle, Menu, X, User, LogOut, ChevronDown, Lock } from 'lucide-react';
+import { Home, Building, ShoppingBag, Bell, MessageCircle, Menu, X, User, LogOut, ChevronDown, Plus, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { AnimatedButton, AnimatedIcon } from '../animated';
 import { useAuthStore } from '@/store/useAuthStore';
 import type { RoleType } from '@/types';
+import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Housing', href: '/housing', icon: Building },
   { name: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
-  { name: 'Roommates', href: '/roommates', icon: Users },
-  { name: 'Agreements', href: '/agreements', icon: FileText },
+  // { name: 'Roommates', href: '/roommates', icon: Users },
+  // { name: 'Agreements', href: '/agreements', icon: FileText },
 ];
 
-const ALL_ROLES: { id: RoleType; label: string }[] = [
-  { id: 'consumer', label: 'Student' },
-  { id: 'seller', label: 'Seller' },
-  { id: 'landlord', label: 'Landlord' },
-  { id: 'agent', label: 'Agent' },
-  { id: 'ambassador', label: 'Ambassador' },
-  { id: 'admin', label: 'Admin' },
+const ALL_ROLES: { id: RoleType; label: string; icon?: typeof Home; themeColor: string; activeLabel: string; onboardLabel: string }[] = [
+  { id: 'consumer', label: 'Student', themeColor: 'text-role-consumer', activeLabel: 'Switch to Student Mode', onboardLabel: 'Student Mode' },
+  { id: 'seller', label: 'Seller', icon: Store, themeColor: 'text-role-seller', activeLabel: 'Switch to Seller Mode', onboardLabel: 'Start Selling / List Item' },
+  { id: 'landlord', label: 'Landlord', themeColor: 'text-role-landlord', activeLabel: 'Switch to Landlord Mode', onboardLabel: 'List Property' },
+  { id: 'agent', label: 'Agent', themeColor: 'text-role-agent', activeLabel: 'Switch to Agent Mode', onboardLabel: 'Become an Agent' },
+  { id: 'ambassador', label: 'Ambassador', themeColor: 'text-role-ambassador', activeLabel: 'Switch to Ambassador', onboardLabel: 'Join Ambassadors' },
+  { id: 'admin', label: 'Admin', themeColor: 'text-gray-700', activeLabel: 'Switch to Admin', onboardLabel: 'Admin' },
 ];
+
+// Get role-specific background class
+const getRoleBgClass = (roleId: RoleType, isActive: boolean) => {
+  const bgMap: Record<RoleType, string> = {
+    consumer: isActive ? 'bg-role-consumer/10' : 'hover:bg-role-consumer/5 active:bg-role-consumer/10',
+    seller: isActive ? 'bg-role-seller/10' : 'hover:bg-role-seller/5 active:bg-role-seller/10',
+    landlord: isActive ? 'bg-role-landlord/10' : 'hover:bg-role-landlord/5 active:bg-role-landlord/10',
+    agent: isActive ? 'bg-role-agent/10' : 'hover:bg-role-agent/5 active:bg-role-agent/10',
+    ambassador: isActive ? 'bg-role-ambassador/10' : 'hover:bg-role-ambassador/5 active:bg-role-ambassador/10',
+    admin: isActive ? 'bg-gray-100' : 'hover:bg-gray-50 active:bg-gray-100',
+  };
+  return bgMap[roleId] || '';
+};
 
 export function Navbar() {
   const location = useLocation();
@@ -37,20 +51,24 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout();
-    setIsMobileMenuOpen(false); // Close menu on logout
+    setIsMobileMenuOpen(false);
   };
 
   const handleRoleSwitch = (role: RoleType) => {
     if (unlockedRoles.includes(role)) {
       setActiveRole(role);
       setIsRoleMenuOpen(false);
-      // Optional: Redirect to dashboard of that role
-      if (role === 'consumer') navigate('/dashboard');
-      else navigate(`/dashboard`); 
+      
+      if (role === 'consumer') {
+        navigate('/dashboard');
+      }  else {
+        navigate(`/dashboard/${role}`);
+      }
     } else {
-      // Redirect to onboarding
-      navigate(`/onboarding/${role}`);
       setIsRoleMenuOpen(false);
+      
+      navigate(`/onboarding/${role}`);
+      
     }
   };
 
@@ -58,8 +76,9 @@ export function Navbar() {
 
   return (
     <nav className="bg-background border-b border-border shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+        {/* Mobile: shorter height, Desktop: taller */}
+        <div className="flex justify-between items-center h-14 md:h-20">
           
           {/* === 1. Left Section: Logo === */}
           <motion.div
@@ -73,11 +92,11 @@ export function Navbar() {
               <img 
                 src="/verbacc-logo.svg" 
                 alt="Verbacc Connect Logo" 
-                className="h-8 w-auto sm:hidden"
+                className="h-8 w-auto md:hidden"
                 onError={(e) => (e.currentTarget.src = 'https://placehold.co/100x40/3ABEFF/FFFFFF?text=V+C&font=poppins')}
               />
               {/* Desktop Logo: Text (themed) */}
-              <div className="hidden sm:flex items-baseline text-2xl">
+              <div className="hidden md:flex items-baseline text-2xl">
                 <span className="font-bold text-primary">verbacc</span>
                 <span className="font-medium opacity-90 ml-1">connect</span>
               </div>
@@ -86,7 +105,7 @@ export function Navbar() {
           
           {/* === 2. Center Section: Desktop Navigation (Pill) === */}
           <motion.div
-            className="hidden sm:flex flex-1 justify-center group"
+            className="hidden md:flex flex-1 justify-center group"
             initial="hidden"
             animate="visible"
             variants={{
@@ -110,11 +129,12 @@ export function Navbar() {
                   >
                     <Link
                       to={item.href}
-                      className={`flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      className={cn(
+                        'flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
                         isActive
                           ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
+                          : 'text-muted-foreground hover:text-foreground active:bg-muted'
+                      )}
                     >
                       <item.icon className="h-4 w-4 mr-2" />
                       {item.name}
@@ -125,9 +145,9 @@ export function Navbar() {
             </div>
           </motion.div>
 
-          {/* === 3. Right Section: Auth & Icons === */}
+          {/* === 3. Right Section: Auth & Icons (Desktop) === */}
           <motion.div
-            className="hidden sm:flex sm:items-center sm:space-x-4"
+            className="hidden md:flex md:items-center md:space-x-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -160,31 +180,36 @@ export function Navbar() {
                           </div>
                           {ALL_ROLES.map((role) => {
                             const isUnlocked = unlockedRoles.includes(role.id);
-                            const isActive = activeRole === role.id;
+                            const isCurrentActive = activeRole === role.id;
                             
-                            if (role.id === 'admin' && !isUnlocked) return null; // Hide admin if not unlocked
+                            if (role.id === 'admin' && !isUnlocked) return null;
+
+                            const displayLabel = isUnlocked ? role.activeLabel : role.onboardLabel;
+                            const RoleIcon = role.icon;
 
                             return (
                               <button
                                 key={role.id}
                                 onClick={() => handleRoleSwitch(role.id)}
-                                className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between group transition-colors ${
-                                  isActive ? 'bg-primary/10 text-primary font-medium' : 'text-foreground hover:bg-muted'
-                                }`}
+                                className={cn(
+                                  'w-full text-left px-4 py-2.5 text-sm flex items-center justify-between group transition-colors',
+                                  isCurrentActive 
+                                    ? `${getRoleBgClass(role.id, true)} ${role.themeColor} font-medium`
+                                    : `text-foreground ${getRoleBgClass(role.id, false)}`
+                                )}
                               >
-                                <span>{role.label}</span>
+                                <div className="flex items-center gap-2">
+                                  {RoleIcon && <RoleIcon className={cn('w-4 h-4', role.themeColor)} />}
+                                  <span className={!isUnlocked ? role.themeColor : ''}>{displayLabel}</span>
+                                </div>
                                 {isUnlocked ? (
-                                  isActive && <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                  isCurrentActive && <div className={cn('w-1.5 h-1.5 rounded-full', `bg-current ${role.themeColor}`)} />
                                 ) : (
-                                  <Lock className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  // Alternatively show Plus for "Add Role" as requested
-                                  // <Plus className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                                  <Plus className={cn('w-4 h-4', role.themeColor, 'opacity-60 group-hover:opacity-100 transition-opacity')} />
                                 )}
                               </button>
                             );
                           })}
-                          
-                          {/* "Add Role" generic button if needed, but the lock items serve as onboarding links */}
                         </div>
                       </motion.div>
                     )}
@@ -194,7 +219,7 @@ export function Navbar() {
                 <AnimatedIcon>
                   <Link
                     to="/notifications"
-                    className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted"
+                    className="text-muted-foreground hover:text-foreground active:bg-muted transition-colors p-2 rounded-full hover:bg-muted"
                   >
                     <Bell className="h-5 w-5" />
                   </Link>
@@ -202,7 +227,7 @@ export function Navbar() {
                 <AnimatedIcon>
                   <Link
                     to="/messages"
-                    className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted"
+                    className="text-muted-foreground hover:text-foreground active:bg-muted transition-colors p-2 rounded-full hover:bg-muted"
                   >
                     <MessageCircle className="h-5 w-5" />
                   </Link>
@@ -234,12 +259,25 @@ export function Navbar() {
             )}
           </motion.div>
 
-          {/* === 4. Mobile Menu Button === */}
-          <div className="sm:hidden flex items-center">
+          {/* === 4. Mobile Right Section: Notifications + Menu === */}
+          <div className="md:hidden flex items-center gap-1">
+            {/* Mobile Quick Icons (when authenticated) */}
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/notifications"
+                  className="relative p-2 text-muted-foreground hover:text-foreground active:bg-muted rounded-lg transition-colors touch-target"
+                >
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+                </Link>
+              </>
+            )}
+            
+            {/* Mobile Menu Button */}
             <motion.button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
-              whileHover={{ scale: 1.05 }}
+              className="inline-flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted active:bg-muted/80 transition-colors touch-target"
               whileTap={{ scale: 0.95 }}
             >
               <span className="sr-only">Open main menu</span>
@@ -263,142 +301,144 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* === 5. Mobile Menu Panel === */}
+      {/* === 5. Mobile Menu Panel (Full Screen Slide) === */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            className="sm:hidden border-t border-border bg-background"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="pt-2 pb-3 space-y-1">
-              {navigation.filter(item => {
-                if (!isAuthenticated && item.name === 'Roommates') return false;
-                return true;
-              }).map((item, index) => {
-                const isActive = location.pathname === item.href;
-                return (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="md:hidden fixed inset-0 top-14 bg-black/20 z-40"
+            />
+            
+            {/* Slide Panel */}
+            <motion.div
+              className="md:hidden fixed inset-x-0 top-14 bg-background z-50 border-b border-border shadow-lg max-h-[calc(100vh-3.5rem)] overflow-y-auto"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              {/* Navigation Links */}
+              <div className="py-2">
+                {navigation.filter(item => {
+                  if (!isAuthenticated && item.name === 'Roommates') return false;
+                  return true;
+                }).map((item) => {
+                  const isActive = location.pathname === item.href;
+                  return (
                     <Link
+                      key={item.name}
                       to={item.href}
-                      className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition-colors ${
+                      className={cn(
+                        'flex items-center px-4 py-3.5 text-base font-medium transition-colors touch-target',
                         isActive
-                          ? 'bg-primary/10 border-primary text-primary'
-                          : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted hover:border-border'
-                      }`}
+                          ? 'bg-primary/10 text-primary border-l-4 border-primary'
+                          : 'text-foreground hover:bg-muted active:bg-muted/80 border-l-4 border-transparent'
+                      )}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <div className="flex items-center">
-                        <item.icon className="h-5 w-5 mr-3" />
-                        {item.name}
-                      </div>
+                      <item.icon className="h-5 w-5 mr-3" />
+                      {item.name}
                     </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
-            
-            {/* --- Mobile Auth Buttons --- */}
-            <div className="border-t border-border pt-4 pb-3">
-              {isAuthenticated ? (
-                <div className="px-4 space-y-3">
-                  {/* Mobile Role Switcher */}
-                  <div className="pb-2 mb-2 border-b border-border">
-                     <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Switch Mode</p>
-                     <div className="grid grid-cols-2 gap-2">
+                  );
+                })}
+              </div>
+              
+              {/* Auth Section */}
+              <div className="border-t border-border">
+                {isAuthenticated ? (
+                  <div className="py-3 px-4 space-y-3">
+                    {/* Mobile Role Switcher - Horizontal Scroll */}
+                    <div className="pb-3 border-b border-border">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Switch Mode</p>
+                      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
                         {ALL_ROLES.map(role => {
-                            if (role.id === 'admin' && !unlockedRoles.includes(role.id)) return null;
-                            const isUnlocked = unlockedRoles.includes(role.id);
-                            const isActive = activeRole === role.id;
-                            
-                           return (
-                             <button
-                               key={role.id}
-                               onClick={() => {
-                                 handleRoleSwitch(role.id);
-                                 setIsMobileMenuOpen(false);
-                               }}
-                               className={`px-3 py-2 text-sm rounded-md text-left ${
-                                  isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
-                               } ${!isUnlocked && 'opacity-60'}`}
-                             >
-                                {role.label} {isUnlocked ? '' : '🔒'}
-                             </button>
-                           )
+                          if (role.id === 'admin' && !unlockedRoles.includes(role.id)) return null;
+                          const isUnlocked = unlockedRoles.includes(role.id);
+                          const isActive = activeRole === role.id;
+                          
+                          return (
+                            <button
+                              key={role.id}
+                              onClick={() => {
+                                handleRoleSwitch(role.id);
+                                setIsMobileMenuOpen(false);
+                              }}
+                              className={cn(
+                                'shrink-0 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-target',
+                                isActive 
+                                  ? 'bg-primary text-primary-foreground' 
+                                  : 'bg-muted text-foreground active:bg-muted/80',
+                                !isUnlocked && 'opacity-70'
+                              )}
+                            >
+                              {role.label} {!isUnlocked && '🔒'}
+                            </button>
+                          );
                         })}
-                     </div>
-                  </div>
+                      </div>
+                    </div>
 
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                    {/* Profile Link */}
                     <Link
                       to="/dashboard"
-                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
+                      className="flex items-center px-3 py-3 text-base font-medium text-foreground hover:bg-muted active:bg-muted/80 rounded-lg transition-colors touch-target"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <User className="h-5 w-5 mr-3" />
                       {user?.firstName || 'Profile'}
                     </Link>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}>
-                    <Link
-                      to="/notifications"
-                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Bell className="h-5 w-5 mr-3" />
-                      Notifications
-                    </Link>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                    
+                    {/* Messages Link */}
                     <Link
                       to="/messages"
-                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
+                      className="flex items-center px-3 py-3 text-base font-medium text-foreground hover:bg-muted active:bg-muted/80 rounded-lg transition-colors touch-target"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <MessageCircle className="h-5 w-5 mr-3" />
                       Messages
                     </Link>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }}>
+                    
+                    {/* Logout Button */}
                     <button
                       onClick={handleLogout}
-                      className="flex items-center w-full pl-3 pr-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md"
+                      className="flex items-center w-full px-3 py-3 text-base font-medium text-destructive hover:bg-destructive/10 active:bg-destructive/20 rounded-lg transition-colors touch-target"
                     >
                       <LogOut className="h-5 w-5 mr-3" />
                       Logout
                     </button>
-                  </motion.div>
-                </div>
-              ) : (
-                <div className="px-4 space-y-3">
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                    <AnimatedButton variant="primary" size="md" className="w-full">
-                      <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                         Get started
+                  </div>
+                ) : (
+                  <div className="py-4 px-4 space-y-3">
+                    <AnimatedButton variant="primary" size="lg" className="w-full">
+                      <Link 
+                        to="/register" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center w-full"
+                      >
+                        Get started
                       </Link>
                     </AnimatedButton>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-                    <AnimatedButton variant="ghost" size="md" className="w-full">
-                      <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                    <AnimatedButton variant="ghost" size="lg" className="w-full">
+                      <Link 
+                        to="/login" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center w-full"
+                      >
                         Sign in
                       </Link>
                     </AnimatedButton>
-                  </motion.div>
-                </div>
-              )}
-            </div>
-          </motion.div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
   );
 }
-

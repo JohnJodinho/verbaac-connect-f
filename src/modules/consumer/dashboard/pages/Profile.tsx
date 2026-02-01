@@ -12,19 +12,18 @@ import { RoleManagementCard } from '../components/RoleManagementCard';
  * Profile Page - Consumer Dashboard
  * 
  * Manages the user's Legal Identity (Global) and Consumer/Tenant sub-profiles.
- * Follows the Persona-Aware Architecture with Fresh Teal (--color-role-consumer) theme.
+ * Mobile-first responsive design with stacked sections.
  */
 export default function Profile() {
   const { user } = useAuthStore();
   const { isDirty, resetForm } = useProfileStore();
   const [showDiscardModal, setShowDiscardModal] = useState(false);
 
-  // Warn user before leaving page with unsaved changes (browser close/refresh)
+  // Warn user before leaving page with unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
         e.preventDefault();
-        // Modern browsers require returnValue to be set
         e.returnValue = '';
         return '';
       }
@@ -44,16 +43,16 @@ export default function Profile() {
   }, [resetForm]);
 
   return (
-    <div className="theme-consumer min-h-screen">
-      {/* Page Header */}
+    <div className="theme-consumer">
+      {/* Page Header - Compact on mobile */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-4 md:mb-8"
       >
-        <div className="flex items-center gap-4">
-          {/* User Avatar */}
-          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-border">
+        <div className="flex items-center gap-3 md:gap-4">
+          {/* User Avatar - Smaller on mobile */}
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-border shrink-0">
             {user?.profilePhotoUrl ? (
               <img 
                 src={user.profilePhotoUrl} 
@@ -61,21 +60,21 @@ export default function Profile() {
                 className="w-full h-full object-cover" 
               />
             ) : (
-              <User className="w-8 h-8 text-muted-foreground" />
+              <User className="w-6 h-6 md:w-8 md:h-8 text-muted-foreground" />
             )}
           </div>
           
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">My Profile</h1>
-            <p className="text-muted-foreground">
-              Manage your identity, preferences, and roles
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">My Profile</h1>
+            <p className="text-sm md:text-base text-muted-foreground truncate">
+              Manage your identity and preferences
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Section Cards */}
-      <div className="space-y-6">
+      {/* Section Cards - Stacked on all screens */}
+      <div className="space-y-4 md:space-y-6">
         {/* Section A: Global Personal Information */}
         <IdentitySection />
 
@@ -87,31 +86,31 @@ export default function Profile() {
         <RoleManagementCard />
       </div>
 
-      {/* Discard Changes Modal */}
+      {/* Discard Changes Modal - Full-width on mobile */}
       {showDiscardModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-50 p-0 md:p-4">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-card rounded-xl border border-border p-6 shadow-2xl max-w-md w-full"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-card rounded-t-2xl md:rounded-xl border border-border p-5 md:p-6 shadow-2xl max-w-md w-full safe-bottom"
           >
             <h3 className="text-lg font-semibold text-foreground mb-2">
               Discard Changes?
             </h3>
             <p className="text-sm text-muted-foreground mb-6">
-              You have unsaved changes. Are you sure you want to leave this page? 
+              You have unsaved changes. Are you sure you want to leave? 
               Your changes will be lost.
             </p>
-            <div className="flex gap-3 justify-end">
+            <div className="flex flex-col-reverse md:flex-row gap-3 md:justify-end">
               <button
                 onClick={handleCancelNavigation}
-                className="px-4 py-2 text-sm font-medium text-foreground bg-muted hover:bg-muted/80 rounded-lg transition-colors"
+                className="w-full md:w-auto px-4 py-3 md:py-2 text-sm font-medium text-foreground bg-muted hover:bg-muted/80 active:bg-muted/70 rounded-lg transition-colors touch-target"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDiscard}
-                className="px-4 py-2 text-sm font-medium text-destructive-foreground bg-destructive hover:bg-destructive/90 rounded-lg transition-colors"
+                className="w-full md:w-auto px-4 py-3 md:py-2 text-sm font-medium text-destructive-foreground bg-destructive hover:bg-destructive/90 active:bg-destructive/80 rounded-lg transition-colors touch-target"
               >
                 Discard Changes
               </button>

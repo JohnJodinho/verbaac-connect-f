@@ -38,15 +38,38 @@ export function StudentProfileSection() {
       setErrors({});
       setIsSaving(true);
 
-      const response = await profileAPI.updateTenantProfile({
-        institution: validData.institution,
-        matricNo: validData.matricNo,
-        level: validData.level,
-        preferredZones: validData.preferredZones,
-      });
+      // Check if using mock API (no backend available)
+      const useMockApi = import.meta.env.VITE_USE_MOCK_API !== 'false';
+      
+      if (useMockApi) {
+        // Mock: Directly update auth store's user with studentProfile
+        console.log('[Mock API] Updating student profile | X-Active-Persona: consumer');
+        console.log('[Mock API] Student data:', validData);
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Update the user's studentProfile in auth store
+        updateUser({
+          studentProfile: {
+            institution: validData.institution,
+            matricNo: validData.matricNo,
+            level: validData.level,
+            preferredZones: validData.preferredZones || [],
+          },
+        });
+      } else {
+        // Real API call
+        const response = await profileAPI.updateTenantProfile({
+          institution: validData.institution,
+          matricNo: validData.matricNo,
+          level: validData.level,
+          preferredZones: validData.preferredZones,
+        });
 
-      if (response.data.data) {
-        updateUser(response.data.data);
+        if (response.data.data) {
+          updateUser(response.data.data);
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {

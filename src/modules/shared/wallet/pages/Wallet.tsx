@@ -9,12 +9,9 @@ import { ReAuthModal } from '../components/ReAuthModal';
 /**
  * Wallet Page - Shared Module
  * 
- * Financial core for all personas. Displays:
- * - WalletHero: Available vs Pending (Escrow) balances
- * - EscrowTracker: Transaction table with 12% platform fee
- * - BankAccountForm: Manage withdrawal bank accounts
- * 
- * Requires session re-authentication for all bank-related actions.
+ * Mobile-first responsive design:
+ * - Stacked single-column on mobile
+ * - 3-column grid on desktop
  */
 export default function Wallet() {
   const [reAuthToken, setReAuthToken] = useState<string | null>(null);
@@ -43,7 +40,6 @@ export default function Wallet() {
   };
 
   const handleFundWallet = () => {
-    // Navigate to fund wallet flow
     console.log('Navigate to fund wallet');
   };
 
@@ -52,33 +48,32 @@ export default function Wallet() {
       handleReAuthRequired('withdraw');
       return;
     }
-    // Navigate to withdraw flow
     console.log('Navigate to withdraw with token:', reAuthToken);
   };
 
   return (
-    <div className="theme-consumer min-h-screen">
-      {/* Page Header */}
+    <div className="theme-consumer w-full max-w-full">
+      {/* Page Header - Compact on mobile */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-4 md:mb-8"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <WalletIcon className="w-6 h-6 text-primary" />
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <WalletIcon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">My Wallet</h1>
-            <p className="text-muted-foreground">
-              Manage your funds and track escrow transactions
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-foreground">My Wallet</h1>
+            <p className="text-sm md:text-base text-muted-foreground truncate">
+              Manage funds and escrow
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Content Grid */}
-      <div className="space-y-6">
+      {/* Content - Stacked on mobile */}
+      <div className="space-y-4 md:space-y-6">
         {/* Wallet Hero - Full Width */}
         <WalletHero
           availableBalance={walletData.availableBalance}
@@ -87,15 +82,15 @@ export default function Wallet() {
           onWithdraw={handleWithdraw}
         />
 
-        {/* Two Column Layout for Desktop */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Escrow Tracker - Wider Column */}
-          <div className="lg:col-span-2">
+        {/* Grid: Full-width stack on mobile, 3-col on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          {/* Escrow Tracker - Full width on mobile, 2 cols on desktop */}
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <EscrowTracker />
           </div>
 
-          {/* Bank Accounts - Narrower Column */}
-          <div className="lg:col-span-1">
+          {/* Bank Accounts - Full width on mobile, 1 col on desktop */}
+          <div className="lg:col-span-1 order-1 lg:order-2">
             <BankAccountForm
               onReAuthRequired={() => handleReAuthRequired('bank')}
               reAuthToken={reAuthToken}

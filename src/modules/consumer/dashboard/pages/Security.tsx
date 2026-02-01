@@ -7,43 +7,42 @@ import { KycStatusCard } from '../components/KycStatusCard';
 /**
  * Security Page - Consumer Dashboard
  * 
- * Focuses on legal identity and account protection:
- * - Password Management with Zod validation
- * - Active Sessions list with device/location tracking
- * - KYC Status display
+ * Mobile-first responsive design:
+ * - Stacked single-column layout on mobile
+ * - Two-column layout on desktop (lg breakpoint)
  */
 export default function Security() {
   return (
-    <div className="theme-consumer min-h-screen">
-      {/* Page Header */}
+    <div className="theme-consumer w-full max-w-full">
+      {/* Page Header - Compact on mobile */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-4 md:mb-8"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Shield className="w-6 h-6 text-primary" />
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <Shield className="w-5 h-5 md:w-6 md:h-6 text-primary" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Security Settings</h1>
-            <p className="text-muted-foreground">
-              Manage your password, sessions, and account security
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-foreground">Security</h1>
+            <p className="text-sm md:text-base text-muted-foreground truncate">
+              Password, sessions & account security
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Content Sections */}
-      <div className="space-y-6">
+      {/* Content Sections - Stacked */}
+      <div className="space-y-4 md:space-y-6">
         {/* KYC Status - Full Width */}
         <KycStatusCard 
           status="active" 
           verifiedAt={new Date().toISOString()} 
         />
 
-        {/* Two Column Layout for Desktop */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Single column on mobile, two columns on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Password Management */}
           <PasswordManagement />
 

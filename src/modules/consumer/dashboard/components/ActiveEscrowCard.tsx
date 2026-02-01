@@ -88,7 +88,7 @@ export function ActiveEscrowCard({ escrow }: ActiveEscrowCardProps) {
             <Icon className={`h-5 w-5 ${config.color}`} />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">Verbaac Secure Pay</h3>
+            <h3 className="font-semibold text-gray-900">Verbacc Secure Pay</h3>
             <p className={`text-sm font-medium ${config.color}`}>{config.label}</p>
           </div>
         </div>

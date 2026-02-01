@@ -110,184 +110,191 @@ export function IdentitySection() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl border border-border p-6 shadow-sm"
-    >
-      {/* Section Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">Personal Information</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Your legal identity on Verbaac Connect
-          </p>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  className="bg-card rounded-xl border border-border p-4 md:p-6 shadow-sm w-full overflow-hidden"
+>
+  {/* Section Header */}
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+    <div>
+      <h2 className="text-lg md:text-xl font-semibold text-foreground">Personal Information</h2>
+      <p className="text-sm text-muted-foreground mt-1">
+        Your legal identity on Verbacc Connect
+      </p>
+    </div>
+    {isDirty && (
+      <span className="self-start text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full whitespace-nowrap">
+        Unsaved changes
+      </span>
+    )}
+  </div>
+
+  {/* Avatar & Contact Section */}
+  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8">
+    <div className="relative flex-shrink-0">
+      <div
+        onClick={handleAvatarClick}
+        className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden cursor-pointer group border-2 border-border hover:border-role-consumer transition-colors"
+      >
+        {avatarPreview ? (
+          <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+        ) : (
+          <span className="text-2xl md:text-3xl font-bold text-muted-foreground">
+            {formData.firstName?.[0]?.toUpperCase() || 'U'}
+          </span>
+        )}
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+          <Camera className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </div>
-        {isDirty && (
-          <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-            Unsaved changes
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleAvatarChange}
+        className="hidden"
+      />
+    </div>
+
+    {/* Contact Info (Read-only with badges) */}
+    <div className="flex-1 w-full space-y-3 min-w-0">
+      {/* Email Row */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <span className="text-sm text-foreground truncate">{user?.email || 'No email'}</span>
+        </div>
+        {user?.isVerified && (
+          <span className="inline-flex items-center gap-1 text-[10px] md:text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+            <CheckCircle2 className="w-3 h-3" />
+            Verified
           </span>
         )}
       </div>
 
-      {/* Avatar Section */}
-      <div className="flex items-start gap-6 mb-8">
-        <div className="relative">
-          <div
-            onClick={handleAvatarClick}
-            className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden cursor-pointer group border-2 border-border hover:border-role-consumer transition-colors"
-          >
-            {avatarPreview ? (
-              <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-3xl font-bold text-muted-foreground">
-                {formData.firstName?.[0]?.toUpperCase() || 'U'}
-              </span>
-            )}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
-              <Camera className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className="hidden"
-          />
+      {/* Phone Row */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Phone className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <span className="text-sm text-foreground truncate">{user?.phoneNumber || 'No phone'}</span>
         </div>
-
-        {/* Contact Info (Read-only with badges) */}
-        <div className="flex-1 space-y-3">
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">{user?.email || 'No email'}</span>
-            {user?.isVerified && (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                <CheckCircle2 className="w-3 h-3" />
-                Verified
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">{user?.phoneNumber || 'No phone'}</span>
-            {user?.phoneNumber && (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                <CheckCircle2 className="w-3 h-3" />
-                Verified
-              </span>
-            )}
-          </div>
-        </div>
+        {user?.phoneNumber && (
+          <span className="inline-flex items-center gap-1 text-[10px] md:text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+            <CheckCircle2 className="w-3 h-3" />
+            Verified
+          </span>
+        )}
       </div>
+    </div>
+  </div>
 
-      {/* Form Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* First Name */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            First Name <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            value={formData.firstName}
-            onChange={(e) => setField('firstName', e.target.value)}
-            className={inputClasses(!!errors.firstName)}
-            placeholder="Enter first name"
-          />
-          {errors.firstName && (
-            <p className="text-xs text-destructive mt-1">{errors.firstName}</p>
-          )}
-        </div>
+  {/* Form Fields */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {/* First Name */}
+    <div className="w-full">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
+        First Name <span className="text-destructive">*</span>
+      </label>
+      <input
+        type="text"
+        value={formData.firstName}
+        onChange={(e) => setField('firstName', e.target.value)}
+        className={`${inputClasses(!!errors.firstName)} w-full`}
+        placeholder="Enter first name"
+      />
+      {errors.firstName && (
+        <p className="text-xs text-destructive mt-1">{errors.firstName}</p>
+      )}
+    </div>
 
-        {/* Last Name */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            Last Name <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            value={formData.lastName}
-            onChange={(e) => setField('lastName', e.target.value)}
-            className={inputClasses(!!errors.lastName)}
-            placeholder="Enter last name"
-          />
-          {errors.lastName && (
-            <p className="text-xs text-destructive mt-1">{errors.lastName}</p>
-          )}
-        </div>
+    {/* Last Name */}
+    <div className="w-full">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
+        Last Name <span className="text-destructive">*</span>
+      </label>
+      <input
+        type="text"
+        value={formData.lastName}
+        onChange={(e) => setField('lastName', e.target.value)}
+        className={`${inputClasses(!!errors.lastName)} w-full`}
+        placeholder="Enter last name"
+      />
+      {errors.lastName && (
+        <p className="text-xs text-destructive mt-1">{errors.lastName}</p>
+      )}
+    </div>
 
-        {/* Middle Name */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            Middle Name
-          </label>
-          <input
-            type="text"
-            value={formData.middleName}
-            onChange={(e) => setField('middleName', e.target.value)}
-            className={inputClasses(!!errors.middleName)}
-            placeholder="Enter middle name (optional)"
-          />
-        </div>
+    {/* Middle Name */}
+    <div className="w-full">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
+        Middle Name
+      </label>
+      <input
+        type="text"
+        value={formData.middleName}
+        onChange={(e) => setField('middleName', e.target.value)}
+        className={`${inputClasses(!!errors.middleName)} w-full`}
+        placeholder="Enter middle name (optional)"
+      />
+    </div>
 
-        {/* Gender */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            Gender <span className="text-destructive">*</span>
-          </label>
-          <select
-            value={formData.gender}
-            onChange={(e) => setField('gender', e.target.value as 'male' | 'female' | '')}
-            className={inputClasses(!!errors.gender)}
-          >
-            <option value="">Select gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          {errors.gender && (
-            <p className="text-xs text-destructive mt-1">{errors.gender}</p>
-          )}
-        </div>
+    {/* Gender */}
+    <div className="w-full">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
+        Gender <span className="text-destructive">*</span>
+      </label>
+      <select
+        value={formData.gender}
+        onChange={(e) => setField('gender', e.target.value as 'male' | 'female' | '')}
+        className={`${inputClasses(!!errors.gender)} w-full`}
+      >
+        <option value="">Select gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      {errors.gender && (
+        <p className="text-xs text-destructive mt-1">{errors.gender}</p>
+      )}
+    </div>
 
-        {/* Date of Birth */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            Date of Birth <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="date"
-            value={formData.dateOfBirth}
-            onChange={(e) => setField('dateOfBirth', e.target.value)}
-            className={inputClasses(!!errors.dateOfBirth)}
-            max={new Date().toISOString().split('T')[0]}
-          />
-          {errors.dateOfBirth && (
-            <p className="text-xs text-destructive mt-1">{errors.dateOfBirth}</p>
-          )}
-        </div>
-      </div>
+    {/* Date of Birth */}
+    <div className="md:col-span-2 w-full">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
+        Date of Birth <span className="text-destructive">*</span>
+      </label>
+      <input
+        type="date"
+        value={formData.dateOfBirth}
+        onChange={(e) => setField('dateOfBirth', e.target.value)}
+        className={`${inputClasses(!!errors.dateOfBirth)} w-full`}
+        max={new Date().toISOString().split('T')[0]}
+      />
+      {errors.dateOfBirth && (
+        <p className="text-xs text-destructive mt-1">{errors.dateOfBirth}</p>
+      )}
+    </div>
+  </div>
 
-      {/* Save Button */}
-      <div className="mt-6 flex justify-end">
-        <button
-          onClick={handleSave}
-          disabled={!isDirty || isSaving}
-          className="inline-flex items-center gap-2 px-6 py-2.5 bg-role-consumer text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSaving ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4" />
-              Save Changes
-            </>
-          )}
-        </button>
-      </div>
-    </motion.div>
+  {/* Save Button */}
+  <div className="mt-8 flex flex-col sm:flex-row justify-end">
+    <button
+      onClick={handleSave}
+      disabled={!isDirty || isSaving}
+      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-role-consumer text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {isSaving ? (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Saving...
+        </>
+      ) : (
+        <>
+          <Save className="w-4 h-4" />
+          Save Changes
+        </>
+      )}
+    </button>
+  </div>
+</motion.div>
   );
 }

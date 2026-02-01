@@ -17,6 +17,7 @@
     "@tanstack/react-query": "^5.84.0",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.11.0",
+    "azure-maps-control": "^3.7.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",

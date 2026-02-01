@@ -44,7 +44,7 @@ const mockMatches = [
  * Matching based on global_prefs (e.g., non-smoker, same level).
  */
 export default function Roommates() {
-  const { canAccessRoommates, isGuest, isStudent, needsStudentVerification } = useVisibilityGate();
+  const { canAccessRoommates, isGuest } = useVisibilityGate();
   const { user } = useAuthStore();
 
   // Locked state for non-students

@@ -5,7 +5,6 @@ import {
   Clock, 
   CheckCircle2, 
   AlertCircle, 
-  Filter,
   ChevronDown,
   ExternalLink
 } from 'lucide-react';

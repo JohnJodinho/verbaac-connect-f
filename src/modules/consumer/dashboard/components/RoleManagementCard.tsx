@@ -98,7 +98,7 @@ export function RoleManagementCard() {
         <div className="flex-1">
           <h2 className="text-xl font-semibold text-foreground">Your Roles</h2>
           <p className="text-sm text-muted-foreground">
-            Manage your identities on Verbaac Connect
+            Manage your identities on Verbacc Connect
           </p>
         </div>
         {hasProfessionalLink && (

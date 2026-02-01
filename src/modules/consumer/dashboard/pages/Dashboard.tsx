@@ -8,11 +8,16 @@ import { MarketplaceScroller } from '../components/MarketplaceScroller';
 import { ConsumerWalletCard } from '../components/ConsumerWalletCard';
 
 /**
- * Consumer Dashboard - Central command center for Verbaac Connect's demand-side.
+ * Consumer Dashboard - Central command center for Verbacc Connect's demand-side.
  * Features personalized greeting, Active Persona Badge, and modular components.
+ * 
+ * Mobile-First Design:
+ * - Reduces heading sizes on mobile
+ * - Stacks cards vertically
+ * - Uses edge-to-edge containers where appropriate
  */
 export default function Dashboard() {
-  const { user, activeRole } = useAuthStore();
+  const { user } = useAuthStore();
   
   // Get time-based greeting
   const getGreeting = () => {
@@ -25,33 +30,34 @@ export default function Dashboard() {
   const firstName = user?.firstName || 'there';
 
   return (
-    <div className="theme-consumer">
+    <div className="theme-consumer w-full max-w-full">
       {/* Dynamic Header with Greeting and Persona Badge */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-4 md:mb-8"
       >
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+        <div className="flex items-start justify-between gap-2 md:gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">
               {getGreeting()}, {firstName}! 👋
             </h1>
-            <p className="text-gray-600">
-              Welcome back! Here's what's happening with your account.
+            <p className="text-sm md:text-base text-gray-600 mt-0.5 md:mt-1">
+              <span className="hidden sm:inline">Welcome back! Here's what's happening with your account.</span>
+              <span className="sm:hidden">Here's your dashboard overview.</span>
             </p>
           </div>
 
-          {/* Active Persona Badge */}
+          {/* Active Persona Badge - Compact on mobile */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-emerald-600 
+            className="shrink-0 flex items-center gap-1.5 md:gap-2 px-2 md:px-4 py-1.5 md:py-2 bg-linear-to-r from-teal-500 to-emerald-600 
                        text-white rounded-full shadow-lg"
           >
-            <User className="h-4 w-4" />
-            <span className="font-medium text-sm">Consumer Mode</span>
+            <User className="h-3 w-3 md:h-4 md:w-4" />
+            <span className="font-medium text-xs md:text-sm">Consumer</span>
           </motion.div>
         </div>
       </motion.div>
@@ -62,10 +68,10 @@ export default function Dashboard() {
       {/* Quick Action Grid - Primary Navigation */}
       <QuickActionGrid />
 
-      {/* Two Column Layout for Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Left Column - Escrow Status */}
-        <div className="lg:col-span-2">
+      {/* Two Column Layout for Cards - Stacked on mobile */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        {/* Left Column - Escrow Status (takes 2 cols on lg) */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
           <ActiveEscrowCard 
             escrow={{
               status: 'held',
@@ -76,8 +82,8 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Right Column - Wallet */}
-        <div className="lg:col-span-1">
+        {/* Right Column - Wallet (shows first on mobile) */}
+        <div className="lg:col-span-1 order-1 lg:order-2">
           <ConsumerWalletCard 
             wallet={{
               availableBalance: 25000,
@@ -96,12 +102,12 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6"
       >
         {/* Recent Activity */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-          <div className="space-y-4">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Recent Activity</h3>
+          <div className="space-y-3 md:space-y-4">
             <ActivityItem
               color="bg-teal-500"
               message="New message from John about apartment listing"
@@ -122,9 +128,9 @@ export default function Dashboard() {
         </div>
 
         {/* Saved Items / Watchlist */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Watchlist</h3>
-          <div className="space-y-3">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Your Watchlist</h3>
+          <div className="space-y-2 md:space-y-3">
             <WatchlistItem
               title="2-Bedroom Flat, Naraguta"
               type="Housing"
@@ -144,7 +150,7 @@ export default function Dashboard() {
               status="Pending"
             />
           </div>
-          <button className="w-full mt-4 text-center text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
+          <button className="w-full mt-3 md:mt-4 text-center text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors py-2 touch-target">
             View All Saved Items
           </button>
         </div>
@@ -156,9 +162,9 @@ export default function Dashboard() {
 // Helper Components
 function ActivityItem({ color, message }: { color: string; message: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className={`w-2 h-2 ${color} rounded-full flex-shrink-0`} />
-      <p className="text-sm text-gray-600">{message}</p>
+    <div className="flex items-start gap-3">
+      <div className={`w-2 h-2 ${color} rounded-full shrink-0 mt-1.5`} />
+      <p className="text-sm text-gray-600 line-clamp-2">{message}</p>
     </div>
   );
 }
@@ -181,12 +187,12 @@ function WatchlistItem({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
-      <div>
-        <h4 className="font-medium text-gray-900 text-sm">{title}</h4>
+    <div className="flex items-center justify-between p-2.5 md:p-3 rounded-lg border border-gray-100 hover:border-gray-200 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer touch-target">
+      <div className="min-w-0 flex-1">
+        <h4 className="font-medium text-gray-900 text-sm truncate">{title}</h4>
         <p className="text-xs text-gray-500">{type} • {price}</p>
       </div>
-      <span className={`text-xs font-medium px-2 py-1 rounded-full ${statusColors[status] || 'text-gray-600 bg-gray-50'}`}>
+      <span className={`shrink-0 ml-2 text-xs font-medium px-2 py-0.5 md:py-1 rounded-full ${statusColors[status] || 'text-gray-600 bg-gray-50'}`}>
         {status}
       </span>
     </div>
