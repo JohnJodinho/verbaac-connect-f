@@ -40,7 +40,7 @@ export default function Home() {
               <AnimatedButton
                 variant="primary"
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 active:bg-white/80 font-bold px-6 md:px-8 shadow-xl w-full sm:w-auto touch-target"
+                className="bg-black text-white hover:bg-white/90 active:bg-white/80 font-bold px-6 md:px-8 shadow-xl w-full sm:w-auto touch-target"
                 onClick={() => navigate('/housing')}
               >
                 <div className="flex items-center justify-center gap-2">
