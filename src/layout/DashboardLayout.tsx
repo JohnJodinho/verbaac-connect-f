@@ -24,6 +24,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { BottomTabBar } from '@/components/navigation/BottomTabBar';
+import { type RoleType } from '@/types';
 
 // Consumer/Student navigation (default)
 const consumerNavigation = [
@@ -165,7 +166,7 @@ export function DashboardLayout() {
   const handleRoleSwitch = (role: string) => {
     setIsRoleSwitcherOpen(false);
     
-    if (unlockedRoles.includes(role as any)) {
+    if (unlockedRoles.includes(role as RoleType)) {
       // Navigate first; the useEffect above will handle setting the role state
       const targetPath = role === 'consumer' ? '/dashboard' : `/dashboard/${role}`;
       navigate(targetPath);
@@ -250,7 +251,7 @@ export function DashboardLayout() {
                             Switch Mode
                           </div>
                           {['consumer', 'seller', 'landlord', 'agent'].map((role) => {
-                            const isUnlocked = unlockedRoles.includes(role as any);
+                            const isUnlocked = unlockedRoles.includes(role as RoleType);
                             const isActive = activeRole === role;
                             const Icon = getRoleIcon(role);
                             

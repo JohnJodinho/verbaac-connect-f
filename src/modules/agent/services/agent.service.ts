@@ -1,4 +1,5 @@
 // import { apiClient } from '@/lib/api';
+import type { CreateListingDTO } from '../../landlord/api/landlord.service'; // Import shared type
 
 export interface AgentProfileData {
   // Step 1: Professional Identity
@@ -153,7 +154,7 @@ export const agentService = {
     return mockManagedProperties;
   },
 
-  createListing: async (data: any): Promise<any> => {
+  createListing: async (data: CreateListingDTO): Promise<{ success: boolean; id: string }> => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     console.log('[Mock API] Agent created proxy listing:', data);
     return { success: true, id: `list_${Math.random()}` };

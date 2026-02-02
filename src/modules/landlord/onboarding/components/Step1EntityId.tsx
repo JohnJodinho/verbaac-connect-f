@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { User, Users, Building2, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLandlordOnboardingStore } from '../../store/useLandlordOnboardingStore';
+import type { LandlordType } from '../../api/landlord.service';
 
 const ENTITIES = [
   {
@@ -28,7 +29,7 @@ export default function Step1EntityId() {
   const { data, updateData, setStep } = useLandlordOnboardingStore();
   const selectedType = data.landlordType;
 
-  const handleSelect = (type: any) => {
+  const handleSelect = (type: LandlordType) => {
     updateData({ landlordType: type });
   };
 
@@ -51,7 +52,7 @@ export default function Step1EntityId() {
           return (
             <button
               key={entity.id}
-              onClick={() => handleSelect(entity.id)}
+              onClick={() => handleSelect(entity.id as LandlordType)}
               className={cn(
                 "w-full p-5 rounded-2xl border-2 text-left transition-all duration-300 relative overflow-hidden group",
                 isSelected 

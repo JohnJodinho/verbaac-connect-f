@@ -12,7 +12,7 @@ const shadowClientSchema = z.object({
   phone: z.string().min(10, "Invalid phone number"),
 });
 
-type ShadowClientFormData = z.infer<typeof shadowClientSchema>;
+export type ShadowClientFormData = z.infer<typeof shadowClientSchema>;
 
 interface AddShadowClientDialogProps {
   isOpen: boolean;

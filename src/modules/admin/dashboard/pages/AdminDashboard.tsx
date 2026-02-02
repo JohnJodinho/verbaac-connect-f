@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { adminService, type SystemHealth } from '../../services/admin.service';
+import { adminService, type SystemHealth, type VerificationRequest, type ActivityLog } from '../../services/admin.service';
 import { Activity, Users, FileCheck, CircleDollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function AdminDashboard() {
   const [health, setHealth] = useState<SystemHealth | null>(null);
-  const [verificationQueue, setVerificationQueue] = useState<any[]>([]);
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [verificationQueue, setVerificationQueue] = useState<VerificationRequest[]>([]);
+  const [recentActivity, setRecentActivity] = useState<ActivityLog[]>([]);
 
   useEffect(() => {
     adminService.getSystemOverview().then(setHealth);
@@ -107,7 +107,17 @@ export default function AdminDashboard() {
   );
 }
 
-function MetricCard({ label, value, icon: Icon, change, alert }: any) {
+interface MetricCardProps {
+  label: string;
+  value: string | number;
+  icon: React.ElementType;
+  change: string;
+  trend?: 'up' | 'down' | 'flat';
+  alert?: boolean;
+  color?: string;
+}
+
+function MetricCard({ label, value, icon: Icon, change, alert }: MetricCardProps) {
   return (
     <div className={cn(
       "bg-white p-6 rounded-xl border shadow-sm",

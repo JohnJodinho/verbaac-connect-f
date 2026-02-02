@@ -21,7 +21,8 @@ import {
 import { cn } from '@/lib/utils';
 import { 
   getPropertyTypes,
-  type ListingType 
+  type ListingType,
+  type CreateListingDTO 
 } from '@/modules/landlord/api/landlord.service'; // Reuse landlord types
 import { agentService, type ManagedProperty } from '../../services/agent.service';
 import { useListingWizardStore } from '@/modules/landlord/store/useListingWizardStore'; // Reuse store
@@ -91,7 +92,7 @@ export default function AgentUnitWizard() {
         basePrice: base,
         finalPrice: final,
         // Backend should infer managed_by from auth token, and get owner_id from building relation
-      });
+      } as CreateListingDTO);
       
       reset();
       navigate('/dashboard/agent/portfolio');

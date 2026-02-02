@@ -70,7 +70,13 @@ export default function AgentOnboarding() {
     watch: watchStep1,
   } = useForm({
     resolver: zodResolver(step1Schema),
-    defaultValues: formData as any,
+    defaultValues: {
+      agency_name: formData.agency_name || '',
+      office_address: formData.office_address || '',
+      experience_years: formData.experience_years || 0,
+      bio: formData.bio || '',
+      operational_zones: formData.operational_zones || [],
+    },
     mode: 'onChange'
   });
 
@@ -82,7 +88,13 @@ export default function AgentOnboarding() {
     watch: watchStep2,
   } = useForm({
     resolver: zodResolver(step2Schema),
-    defaultValues: { ...formData, background_check_consent: false, terms_accepted: false } as any,
+    defaultValues: {
+      id_type: formData.id_type || 'national_id',
+      id_url: formData.id_url || '',
+      proof_of_address_doc: formData.proof_of_address_doc || '',
+      background_check_consent: formData.background_check_consent || false,
+      terms_accepted: formData.terms_accepted || false,
+    },
     mode: 'onChange'
   });
 
@@ -147,7 +159,7 @@ export default function AgentOnboarding() {
   const handleZoneToggle = (zone: string) => {
     const current = watchStep1('operational_zones') || [];
     const newZones = current.includes(zone) 
-      ? current.filter((z: string) => z !== zone)
+      ? current.filter((z) => typeof z === 'string' && z !== zone)
       : [...current, zone];
     setValueStep1('operational_zones', newZones);
   };

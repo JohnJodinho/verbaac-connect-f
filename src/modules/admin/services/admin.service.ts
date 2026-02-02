@@ -398,6 +398,7 @@ export const adminService = {
   // 3. User Management Placeholders
   searchUsers: async (_query: string) => {
     // To be implemented
+    console.log('Searching users:', _query);
     return [];
   },
 
@@ -470,7 +471,7 @@ export const adminService = {
     return mockDisputeQueue;
   },
 
-  resolveDispute: async (id: string, action: 'release_escrow' | 'refund_payer', _notes: string) => {
+  resolveDispute: async (id: string, action: 'release_escrow' | 'refund_payer', notes: string) => {
     await new Promise(resolve => setTimeout(resolve, 800));
     const dispute = mockDisputeQueue.find(d => d.id === id);
     if (dispute) {
@@ -478,7 +479,7 @@ export const adminService = {
        adminService.logActivity({
           type: 'financial',
           action: action === 'release_escrow' ? 'RELEASE_FUNDS' : 'REFUND_PAYER',
-          target: dispute.transaction_ref,
+          target: `${dispute.transaction_ref} - ${notes}`,
           actor: 'Manual Admin Action'
        });
     }
@@ -504,12 +505,12 @@ export const adminService = {
     }
   },
 
-  async inviteAdmin(email: string, _level: string): Promise<void> {
+  async inviteAdmin(email: string, level: string): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000));
     adminService.logActivity({
       type: 'system',
       action: 'INVITE_ADMIN',
-      target: email,
+      target: `${email} as ${level}`,
       actor: 'Superadmin'
     });
   },

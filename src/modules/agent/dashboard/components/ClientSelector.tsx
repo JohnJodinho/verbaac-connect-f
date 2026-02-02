@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, UserPlus, CheckCircle2, Ghost } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { agentService, type ClientProfile } from '../../services/agent.service';
-import AddShadowClientDialog from './AddShadowClientDialog';
+import AddShadowClientDialog, { type ShadowClientFormData } from './AddShadowClientDialog';
 import { cn } from '@/lib/utils'; // Assuming utils location
 
 interface ClientSelectorProps {
@@ -32,7 +32,7 @@ export default function ClientSelector({ onSelect, selectedClientId }: ClientSel
     fetchClients();
   }, []);
 
-  const handleCreateShadowClient = async (data: any) => {
+  const handleCreateShadowClient = async (data: ShadowClientFormData) => {
     const newClient = await agentService.createShadowClient(data);
     await fetchClients();
     onSelect(newClient); // Auto-select new client
